@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace TarodevController {
     /// <summary>
@@ -16,6 +17,11 @@ namespace TarodevController {
         // Public for external hooks
         public Vector3 Velocity { get; private set; }
         public FrameInput Input { get; private set; }
+        
+        private float _moveInput;
+        private bool _jumpPressed;
+        private bool _jumpReleased;
+        
         public bool JumpingThisFrame { get; private set; }
         public bool LandingThisFrame { get; private set; }
         public Vector3 RawMovement { get; private set; }
@@ -85,15 +91,29 @@ namespace TarodevController {
 
         private void GatherInput() {
             Input = new FrameInput {
-                JumpDown = UnityEngine.Input.GetButtonDown("Jump"),
-                JumpUp = UnityEngine.Input.GetButtonUp("Jump"),
-                X = UnityEngine.Input.GetAxisRaw("Horizontal")
+                JumpDown = _jumpPressed,
+                JumpUp = _jumpReleased,
+                X = _moveInput
             };
             if (Input.JumpDown) {
                 _lastJumpPressed = Time.time;
             }
-
-            if (IsHoldingWeapon && UnityEngine.Input.GetKey(KeyCode.B)){
+        }
+        
+        public void OnMove(InputAction.CallbackContext context) {
+            _moveInput = context.ReadValue<Vector2>().x;
+            if (context.canceled){
+                _moveInput = 0f;
+            }
+        }
+        
+        public void OnJump(InputAction.CallbackContext context) {
+            _jumpPressed = context.performed;
+            _jumpReleased = context.canceled;
+        }
+        
+        public void OnShoot(InputAction.CallbackContext context) {
+            if (IsHoldingWeapon){
                 _currentWeapon.ShootWeapon();
             }
         }
