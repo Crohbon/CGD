@@ -29,7 +29,7 @@ namespace TarodevController {
         
         
         public float Hitpoints;
-        public int PlayerID;
+        private int _playerID;
         public bool IsHoldingWeapon { get; private set; }
         private Weapon _currentWeapon;
         
@@ -39,8 +39,15 @@ namespace TarodevController {
 
         // This is horrible, but for some reason colliders are not fully established when update starts...
         private bool _active;
-        void Awake() => Invoke(nameof(Activate), 0.5f);
-        void Activate() =>  _active = true;
+
+        private void Awake() {
+            Invoke(nameof(Activate), 0.5f);
+            _playerID = gameObject.GetComponent<PlayerInput>().playerIndex;
+        }
+
+        private void Activate() {
+            _active = true;
+        }
 
         private void OnEnable() {
             GameEvents.Instance.weaponIsEmpty.AddListener(HandleWeaponIsEmpty);
@@ -55,16 +62,15 @@ namespace TarodevController {
         #region Eventhandler
 
         private void HandleWeaponIsEmpty(int id) {
-            if (id == PlayerID){
+            if (id == _playerID){
                 IsHoldingWeapon = false;
             }
         }
 
         private void HandleWeaponPickUp(int id) {
-            if (id == PlayerID){
-                IsHoldingWeapon = true;
-                _currentWeapon = GetComponentInChildren<Weapon>();
-            }
+            if (id != _playerID) return;
+            IsHoldingWeapon = true;
+            _currentWeapon = GetComponentInChildren<Weapon>();
         }
 
         #endregion

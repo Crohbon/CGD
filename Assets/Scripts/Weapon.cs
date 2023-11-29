@@ -2,6 +2,7 @@ using System;
 using TarodevController;
 using Unity.Mathematics;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Weapon : MonoBehaviour {
 
@@ -32,8 +33,8 @@ public class Weapon : MonoBehaviour {
         _weaponTransform.localPosition = Vector3.zero;
         _weaponTransform.up = player.transform.right * player.transform.localScale.x;
         
-        _attachedPlayerId = player.PlayerID;
-        GameEvents.Instance.OnWeaponPickUp(player.PlayerID);
+        _attachedPlayerId = player.gameObject.GetComponent<PlayerInput>().playerIndex;
+        GameEvents.Instance.OnWeaponPickUp(_attachedPlayerId);
     }
 
     public void ShootWeapon() {
