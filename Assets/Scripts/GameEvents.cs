@@ -28,5 +28,10 @@ public class GameEvents : MonoBehaviour
     
     public UnityEvent<int> weaponIsEmpty;
     public void OnWeaponIsEmpty(int phase) => weaponIsEmpty?.Invoke(phase);
-
+    
+    public UnityEvent<float, GameObject> playerHit;
+    public void OnPlayerHit(float damage, GameObject player) => playerHit?.Invoke(damage, player);
+    
+    public UnityEvent playerDeath;
+    public void OnPlayerDeath() => playerDeath?.Invoke();
 }

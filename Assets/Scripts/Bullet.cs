@@ -14,8 +14,9 @@ public class Bullet : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D other) {
-        PlayerController target = other.GetComponent<PlayerController>();
-        if(target != null) target.Hitpoints -= Damage;
+        if (other.CompareTag("Player")){
+            GameEvents.Instance.OnPlayerHit(Damage, other.gameObject);
+        }
         Destroy(gameObject);
     }
 

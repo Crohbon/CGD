@@ -4,6 +4,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Serialization;
 
 namespace TarodevController {
     /// <summary>
@@ -28,7 +29,7 @@ namespace TarodevController {
         public bool Grounded => _colDown;
         
         
-        public float Hitpoints;
+        [SerializeField] private float _hitpoints;
         private int _playerID;
         public bool IsHoldingWeapon { get; private set; }
         private Weapon _currentWeapon;
@@ -52,11 +53,13 @@ namespace TarodevController {
         private void OnEnable() {
             GameEvents.Instance.weaponIsEmpty.AddListener(HandleWeaponIsEmpty);
             GameEvents.Instance.weaponPickUp.AddListener(HandleWeaponPickUp);
+            GameEvents.Instance.playerHit.AddListener(HandlePlayerHit);
         }
 
         private void OnDisable() {
             GameEvents.Instance?.weaponIsEmpty.RemoveListener(HandleWeaponIsEmpty);
             GameEvents.Instance?.weaponPickUp.RemoveListener(HandleWeaponPickUp);
+            GameEvents.Instance?.playerHit.RemoveListener(HandlePlayerHit);
         }
 
         #region Eventhandler
@@ -71,6 +74,15 @@ namespace TarodevController {
             if (id != _playerID) return;
             IsHoldingWeapon = true;
             _currentWeapon = GetComponentInChildren<Weapon>();
+        }
+
+        private void HandlePlayerHit(float damage, GameObject hitPlayer) {
+            if (!hitPlayer.Equals(gameObject)) return;
+            _hitpoints -= damage;
+            if (_hitpoints <= 0f){
+                GameEvents.Instance.OnPlayerDeath();
+                Destroy(gameObject);
+            }
         }
 
         #endregion
