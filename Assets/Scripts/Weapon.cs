@@ -9,7 +9,6 @@ public class Weapon : MonoBehaviour {
     [SerializeField] private GameObject bulletPrefab;
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private float weaponDmg;
-    [SerializeField] private float weaponKb;
     [SerializeField] private float shotCd;
     [SerializeField] private float ammo;
     [SerializeField] private string weaponName;

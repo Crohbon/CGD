@@ -1,11 +1,8 @@
-using System;
-using TarodevController;
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
     public float Damage;
     public float BulletSpeed;
-    public Vector3 Direction;
 
     private Transform _bulletTransform;
     
@@ -15,7 +12,7 @@ public class Bullet : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player")){
-            GameEvents.Instance.OnPlayerHit(Damage, other.gameObject);
+            GameEvents.Instance.OnPlayerHit(other.GetComponent<EntityHealth>(), Damage);
         }
         Destroy(gameObject);
     }

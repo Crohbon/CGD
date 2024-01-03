@@ -1,10 +1,7 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
 
 namespace TarodevController {
     /// <summary>
@@ -29,7 +26,6 @@ namespace TarodevController {
         public bool Grounded => _colDown;
         
         
-        [SerializeField] private float _hitpoints;
         private int _playerID;
         public bool IsHoldingWeapon { get; private set; }
         private Weapon _currentWeapon;
@@ -53,13 +49,11 @@ namespace TarodevController {
         private void OnEnable() {
             GameEvents.Instance.weaponIsEmpty.AddListener(HandleWeaponIsEmpty);
             GameEvents.Instance.weaponPickUp.AddListener(HandleWeaponPickUp);
-            GameEvents.Instance.playerHit.AddListener(HandlePlayerHit);
         }
 
         private void OnDisable() {
             GameEvents.Instance?.weaponIsEmpty.RemoveListener(HandleWeaponIsEmpty);
             GameEvents.Instance?.weaponPickUp.RemoveListener(HandleWeaponPickUp);
-            GameEvents.Instance?.playerHit.RemoveListener(HandlePlayerHit);
         }
 
         #region Eventhandler
@@ -74,15 +68,6 @@ namespace TarodevController {
             if (id != _playerID) return;
             IsHoldingWeapon = true;
             _currentWeapon = GetComponentInChildren<Weapon>();
-        }
-
-        private void HandlePlayerHit(float damage, GameObject hitPlayer) {
-            if (!hitPlayer.Equals(gameObject)) return;
-            _hitpoints -= damage;
-            if (_hitpoints <= 0f){
-                GameEvents.Instance.OnPlayerDeath();
-                Destroy(gameObject);
-            }
         }
 
         #endregion
@@ -146,8 +131,8 @@ namespace TarodevController {
         [SerializeField] private float _detectionRayLength = 0.1f;
         [SerializeField] [Range(0.1f, 0.3f)] private float _rayBuffer = 0.1f; // Prevents side detectors hitting the ground
 
-        private RayRange _raysUp, _raysRight, _raysDown, _raysLeft;
-        private bool _colUp, _colRight, _colDown, _colLeft;
+        private RayRange _raysUp, _raysUpLeft, _raysUpRight, _raysRight, _raysDown, _raysDownLeft, _raysDownRight, _raysLeft;
+        private bool _colUp, _colUpLeft, _colUpRight, _colRight, _colDown, _colDownLeft, _colDownRight, _colLeft;
 
         private float _timeLeftGrounded;
 
@@ -158,17 +143,25 @@ namespace TarodevController {
 
             // Ground
             LandingThisFrame = false;
-            var groundedCheck = RunDetection(_raysDown);
-            if (_colDown && !groundedCheck) _timeLeftGrounded = Time.time; // Only trigger when first leaving
-            else if (!_colDown && groundedCheck) {
-                _coyoteUsable = true; // Only trigger when first touching
-                LandingThisFrame = true;
+            bool groundedCheck = RunDetection(_raysDown);
+            switch (_colDown){
+                case true when !groundedCheck:
+                    _timeLeftGrounded = Time.time; // Only trigger when first leaving
+                    break;
+                case false when groundedCheck:
+                    _coyoteUsable = true; // Only trigger when first touching
+                    LandingThisFrame = true;
+                    break;
             }
 
             _colDown = groundedCheck;
 
             // The rest
+            _colDownLeft = RunDetection(_raysDownLeft);
+            _colDownRight = RunDetection(_raysDownRight);
             _colUp = RunDetection(_raysUp);
+            _colUpLeft = RunDetection(_raysUpLeft);
+            _colUpRight = RunDetection(_raysUpRight);
             _colLeft = RunDetection(_raysLeft);
             _colRight = RunDetection(_raysRight);
 
@@ -179,18 +172,22 @@ namespace TarodevController {
 
         private void CalculateRayRanged() {
             // This is crying out for some kind of refactor. 
-            var b = new Bounds(transform.position, _characterBounds.size);
+            Bounds b = new Bounds(transform.position, _characterBounds.size);
 
             _raysDown = new RayRange(b.min.x + _rayBuffer, b.min.y, b.max.x - _rayBuffer, b.min.y, Vector2.down);
+            _raysDownLeft = new RayRange(b.min.x + _rayBuffer, b.min.y, b.max.x - _rayBuffer, b.min.y, new Vector2(-1,-1));
+            _raysDownRight = new RayRange(b.min.x + _rayBuffer, b.min.y, b.max.x - _rayBuffer, b.min.y, new Vector2(1,-1));
             _raysUp = new RayRange(b.min.x + _rayBuffer, b.max.y, b.max.x - _rayBuffer, b.max.y, Vector2.up);
+            _raysUpLeft = new RayRange(b.min.x + _rayBuffer, b.max.y, b.max.x - _rayBuffer, b.max.y, new Vector2(-1,1));
+            _raysUpRight = new RayRange(b.min.x + _rayBuffer, b.max.y, b.max.x - _rayBuffer, b.max.y, new Vector2(1,1));
             _raysLeft = new RayRange(b.min.x, b.min.y + _rayBuffer, b.min.x, b.max.y - _rayBuffer, Vector2.left);
             _raysRight = new RayRange(b.max.x, b.min.y + _rayBuffer, b.max.x, b.max.y - _rayBuffer, Vector2.right);
         }
 
 
         private IEnumerable<Vector2> EvaluateRayPositions(RayRange range) {
-            for (var i = 0; i < _detectorCount; i++) {
-                var t = (float)i / (_detectorCount - 1);
+            for (int i = 0; i < _detectorCount; i++) {
+                float t = (float)i / (_detectorCount - 1);
                 yield return Vector2.Lerp(range.Start, range.End, t);
             }
         }
@@ -204,8 +201,8 @@ namespace TarodevController {
             if (!Application.isPlaying) {
                 CalculateRayRanged();
                 Gizmos.color = Color.blue;
-                foreach (var range in new List<RayRange> { _raysUp, _raysRight, _raysDown, _raysLeft }) {
-                    foreach (var point in EvaluateRayPositions(range)) {
+                foreach (RayRange range in new List<RayRange> { _raysUp, _raysRight, _raysDown, _raysLeft }) {
+                    foreach (Vector2 point in EvaluateRayPositions(range)) {
                         Gizmos.DrawRay(point, range.Dir * _detectionRayLength);
                     }
                 }
@@ -325,7 +322,7 @@ namespace TarodevController {
                 _endedJumpEarly = true;
             }
 
-            if (_colUp) {
+            if (_colUp && _colUpLeft && _colUpRight) {
                 if (_currentVerticalSpeed > 0) _currentVerticalSpeed = 0;
             }
         }
@@ -335,28 +332,28 @@ namespace TarodevController {
         #region Move
 
         [Header("MOVE")] [SerializeField, Tooltip("Raising this value increases collision accuracy at the cost of performance.")]
-        private int _freeColliderIterations = 10;
+        private int _freeColliderIterations = 20;
 
         // We cast our bounds before moving to avoid future collisions
         private void MoveCharacter() {
-            var pos = transform.position;
+            Vector3 pos = transform.position;
             RawMovement = new Vector3(_currentHorizontalSpeed, _currentVerticalSpeed); // Used externally
-            var move = RawMovement * Time.deltaTime;
-            var furthestPoint = pos + move;
+            Vector3 move = RawMovement * Time.deltaTime;
+            Vector3 furthestPoint = pos + move;
 
             // check furthest movement. If nothing hit, move and don't do extra checks
-            var hit = Physics2D.OverlapBox(furthestPoint, _characterBounds.size, 0, _groundLayer);
+            Collider2D hit = Physics2D.OverlapBox(furthestPoint, _characterBounds.size, 0, _groundLayer);
             if (!hit) {
                 transform.position += move;
                 return;
             }
 
             // otherwise increment away from current pos; see what closest position we can move to
-            var positionToMoveTo = transform.position;
+            Vector3 positionToMoveTo = transform.position;
             for (int i = 1; i < _freeColliderIterations; i++) {
                 // increment to check all but furthestPoint - we did that already
-                var t = (float)i / _freeColliderIterations;
-                var posToTry = Vector2.Lerp(pos, furthestPoint, t);
+                float t = (float)i / _freeColliderIterations;
+                Vector2 posToTry = Vector2.Lerp(pos, furthestPoint, t);
 
                 if (Physics2D.OverlapBox(posToTry, _characterBounds.size, 0, _groundLayer)) {
                     transform.position = positionToMoveTo;
@@ -364,8 +361,11 @@ namespace TarodevController {
                     // We've landed on a corner or hit our head on a ledge. Nudge the player gently
                     if (i == 1) {
                         if (_currentVerticalSpeed < 0) _currentVerticalSpeed = 0;
-                        var dir = transform.position - hit.transform.position;
-                        transform.position += dir.normalized * move.magnitude;
+                        Vector3 dir = transform.position - hit.transform.position;
+                        dir = new Vector3(dir.x, dir.y > 0 ? 1f : -1f, 0);
+                        if (!_colDownLeft && dir.x < 0 || !_colDownRight && dir.x > 0){
+                            transform.position += dir.normalized * move.magnitude;
+                        }
                     }
 
                     return;
