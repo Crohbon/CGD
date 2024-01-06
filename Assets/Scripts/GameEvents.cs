@@ -23,8 +23,8 @@ public class GameEvents : MonoBehaviour
         }
     }
 
-    public UnityEvent<int> weaponPickUp;
-    public void OnWeaponPickUp(int phase) => weaponPickUp?.Invoke(phase);
+    public UnityEvent<int,Weapon> weaponPickUp;
+    public void OnWeaponPickUp(int playerIdToAttachTo, Weapon weaponToAttach) => weaponPickUp?.Invoke(playerIdToAttachTo, weaponToAttach);
     
     public UnityEvent<int> weaponIsEmpty;
     public void OnWeaponIsEmpty(int phase) => weaponIsEmpty?.Invoke(phase);
@@ -34,4 +34,13 @@ public class GameEvents : MonoBehaviour
     
     public UnityEvent<int> playerDeath;
     public void OnPlayerDeath(int id) => playerDeath?.Invoke(id);
+
+    public UnityEvent roundStart;
+    public void OnRoundStart() => roundStart?.Invoke();
+
+    public UnityEvent<int> playerRoundWin;
+    public void OnPlayerRoundWin(int id) => playerRoundWin?.Invoke(id);
+    
+    public UnityEvent<int> playerGameWin;
+    public void OnPlayerGameWin(int id) => playerGameWin?.Invoke(id);
 }

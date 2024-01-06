@@ -64,10 +64,10 @@ namespace TarodevController {
             }
         }
 
-        private void HandleWeaponPickUp(int id) {
+        private void HandleWeaponPickUp(int id, Weapon weaponToAttach) {
             if (id != _playerID) return;
             IsHoldingWeapon = true;
-            _currentWeapon = GetComponentInChildren<Weapon>();
+            _currentWeapon = weaponToAttach;
         }
 
         #endregion

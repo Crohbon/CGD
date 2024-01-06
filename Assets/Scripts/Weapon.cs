@@ -33,7 +33,7 @@ public class Weapon : MonoBehaviour {
         _weaponTransform.up = player.transform.right * player.transform.localScale.x;
         
         _attachedPlayerId = player.gameObject.GetComponent<PlayerInput>().playerIndex;
-        GameEvents.Instance.OnWeaponPickUp(_attachedPlayerId);
+        GameEvents.Instance.OnWeaponPickUp(_attachedPlayerId, this);
     }
 
     public void ShootWeapon() {
