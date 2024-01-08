@@ -25,8 +25,7 @@ namespace TarodevController {
         public Vector3 RawMovement { get; private set; }
         public bool Grounded => _colDown;
         
-        
-        private int _playerID;
+        public PlayerConfiguration PlayerConfiguration;
         public bool IsHoldingWeapon { get; private set; }
         private Weapon _currentWeapon;
         
@@ -39,12 +38,13 @@ namespace TarodevController {
 
         private void Awake() {
             Invoke(nameof(Activate), 0.5f);
-            _playerID = gameObject.GetComponent<PlayerInput>().playerIndex;
         }
 
         private void Activate() {
             _active = true;
         }
+
+        #region Eventhandler
 
         private void OnEnable() {
             GameEvents.Instance.weaponIsEmpty.AddListener(HandleWeaponIsEmpty);
@@ -55,17 +55,15 @@ namespace TarodevController {
             GameEvents.Instance?.weaponIsEmpty.RemoveListener(HandleWeaponIsEmpty);
             GameEvents.Instance?.weaponPickUp.RemoveListener(HandleWeaponPickUp);
         }
-
-        #region Eventhandler
-
+        
         private void HandleWeaponIsEmpty(int id) {
-            if (id == _playerID){
+            if (id == PlayerConfiguration.PlayerIndex){
                 IsHoldingWeapon = false;
             }
         }
 
         private void HandleWeaponPickUp(int id, Weapon weaponToAttach) {
-            if (id != _playerID) return;
+            if (id != PlayerConfiguration.PlayerIndex) return;
             IsHoldingWeapon = true;
             _currentWeapon = weaponToAttach;
         }
@@ -89,20 +87,20 @@ namespace TarodevController {
             MoveCharacter(); // Actually perform the axis movement
         }
 
-
-        #region Gather Input
-
-        private void GatherInput() {
-            Input = new FrameInput {
-                JumpDown = _jumpPressed,
-                JumpUp = _jumpReleased,
-                X = _moveInput
-            };
-            if (Input.JumpDown) {
-                _lastJumpPressed = Time.time;
-            }
+        #region Controls
+        private PlayerControls _playerControls;
+        public void InitializeControls(PlayerConfiguration playerConfiguration) {
+            _playerControls = new PlayerControls();
+            PlayerConfiguration = playerConfiguration;
+            PlayerConfiguration.Input.onActionTriggered += HandleInput;
         }
-        
+
+        private void HandleInput(InputAction.CallbackContext context) {
+            if (context.action.name == _playerControls.PlayerInput.Move.name) OnMove(context);
+            if (context.action.name == _playerControls.PlayerInput.Jump.name) OnJump(context);
+            if (context.action.name == _playerControls.PlayerInput.Shoot.name) OnShoot(context);
+        }
+
         public void OnMove(InputAction.CallbackContext context) {
             _moveInput = context.ReadValue<Vector2>().x;
             if (context.canceled){
@@ -118,6 +116,21 @@ namespace TarodevController {
         public void OnShoot(InputAction.CallbackContext context) {
             if (IsHoldingWeapon){
                 _currentWeapon.ShootWeapon();
+            }
+        }
+
+        #endregion
+
+        #region Gather Input
+
+        private void GatherInput() {
+            Input = new FrameInput {
+                JumpDown = _jumpPressed,
+                JumpUp = _jumpReleased,
+                X = _moveInput
+            };
+            if (Input.JumpDown) {
+                _lastJumpPressed = Time.time;
             }
         }
 

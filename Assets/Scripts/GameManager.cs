@@ -1,13 +1,18 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using TMPro;
 using UnityEngine;
 
-public class GameState : MonoBehaviour{
-    public List<int> _winPoints;
+public class GameManager : MonoBehaviour {
+    [SerializeField] private Transform _scoreParent;
+    [SerializeField] private GameObject _scorePrefab;
+    private List<TextMeshProUGUI> _scoreTexts;
+    private List<int> _winPoints;
     private List<bool> _alivePlayers;
     private List<bool> _playerSlotFilled;
+
+    private Coroutine _roundStartCoroutine;
 
     private void Awake() {
         InitializeGame();
@@ -28,7 +33,7 @@ public class GameState : MonoBehaviour{
 
         int playersAlive = _alivePlayers.Count(playerAlive => playerAlive);
 
-        if (playersAlive > 1) return;
+        if (playersAlive != 1) return;
         Time.timeScale = 0;
         
         int lastPlayerIndex = _alivePlayers.IndexOf(true);
@@ -39,28 +44,36 @@ public class GameState : MonoBehaviour{
         }
         else{
             GameEvents.Instance.OnPlayerRoundWin(lastPlayerIndex);
+            _scoreTexts[lastPlayerIndex].SetText("Player " + lastPlayerIndex + ": " + _winPoints[lastPlayerIndex]);
+            StartRound();
         }
+        
     }
 
     #endregion
 
     private void InitializeGame() {
-        _winPoints = new List<int>(Settings.PlayerAmount);
-        _playerSlotFilled = new List<bool>(Settings.MaxPlayerAmount);
-        for (int i = 0; i < Settings.PlayerAmount; i++){
-            _playerSlotFilled[i] = true;
+        int playerAmount = PlayerConfigurationManager.Instance.GetPlayerConfigs().Count;
+        _winPoints = new List<int>();
+        _playerSlotFilled = new List<bool>();
+        _scoreTexts = new List<TextMeshProUGUI>();
+        for (int i = 0; i < playerAmount; i++){
+            _playerSlotFilled.Add(true);
+            _winPoints.Add(0);
+            GameObject scoreEntry = Instantiate(_scorePrefab, _scoreParent);
+            _scoreTexts.Add(scoreEntry.GetComponentInChildren<TextMeshProUGUI>());
+            _scoreTexts[i].SetText("Player " + (i+1) + ": 0");
         }
         StartRound();
     }
 
     private void StartRound() {
         _alivePlayers = _playerSlotFilled;
-        GameEvents.Instance.OnRoundStart();
-        StartCoroutine(RoundStartCoroutine());
+        _roundStartCoroutine = StartCoroutine(RoundStartCoroutine());
     }
 
     private IEnumerator RoundStartCoroutine() {
         yield return new WaitForSeconds(3f);
-        Time.timeScale = 1;
+        GameEvents.Instance.OnRoundStart();
     }
 }
