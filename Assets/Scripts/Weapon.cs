@@ -1,8 +1,5 @@
-using System;
 using TarodevController;
-using Unity.Mathematics;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 public class Weapon : MonoBehaviour {
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -85,6 +86,10 @@ namespace TarodevController {
             CalculateJump(); // Possibly overrides vertical
 
             MoveCharacter(); // Actually perform the axis movement
+        }
+
+        private void OnDestroy() {
+            PlayerConfiguration.Input.onActionTriggered -= HandleInput;
         }
 
         #region Controls

@@ -10,8 +10,8 @@ public class GameManager : MonoBehaviour {
     private List<TextMeshProUGUI> _scoreTexts;
     private List<int> _winPoints;
     private List<bool> _alivePlayers;
-    private List<bool> _playerSlotFilled;
 
+    private int _playerAmount;
     private Coroutine _roundStartCoroutine;
 
     private void Awake() {
@@ -31,11 +31,8 @@ public class GameManager : MonoBehaviour {
     private void HandlePlayerDeath(int playerIndex) {
         _alivePlayers[playerIndex] = false;
 
-        int playersAlive = _alivePlayers.Count(playerAlive => playerAlive);
+        if (_alivePlayers.Count(playerAlive => playerAlive) > 1) return;
 
-        if (playersAlive != 1) return;
-        Time.timeScale = 0;
-        
         int lastPlayerIndex = _alivePlayers.IndexOf(true);
         _winPoints[lastPlayerIndex]++;
 
@@ -44,7 +41,7 @@ public class GameManager : MonoBehaviour {
         }
         else{
             GameEvents.Instance.OnPlayerRoundWin(lastPlayerIndex);
-            _scoreTexts[lastPlayerIndex].SetText("Player " + lastPlayerIndex + ": " + _winPoints[lastPlayerIndex]);
+            _scoreTexts[lastPlayerIndex].SetText("Player " + (lastPlayerIndex + 1) + ": " + _winPoints[lastPlayerIndex]);
             StartRound();
         }
         
@@ -53,12 +50,10 @@ public class GameManager : MonoBehaviour {
     #endregion
 
     private void InitializeGame() {
-        int playerAmount = PlayerConfigurationManager.Instance.GetPlayerConfigs().Count;
+        _playerAmount = PlayerConfigurationManager.Instance.GetPlayerConfigs().Count;
         _winPoints = new List<int>();
-        _playerSlotFilled = new List<bool>();
         _scoreTexts = new List<TextMeshProUGUI>();
-        for (int i = 0; i < playerAmount; i++){
-            _playerSlotFilled.Add(true);
+        for (int i = 0; i < _playerAmount; i++){
             _winPoints.Add(0);
             GameObject scoreEntry = Instantiate(_scorePrefab, _scoreParent);
             _scoreTexts.Add(scoreEntry.GetComponentInChildren<TextMeshProUGUI>());
@@ -68,7 +63,14 @@ public class GameManager : MonoBehaviour {
     }
 
     private void StartRound() {
-        _alivePlayers = _playerSlotFilled;
+        _alivePlayers = new List<bool>();
+        for (int i = 0; i < _playerAmount; i++){
+            _alivePlayers.Add(true);
+        }
+
+        if (_roundStartCoroutine != null){
+            StopCoroutine(_roundStartCoroutine);
+        }
         _roundStartCoroutine = StartCoroutine(RoundStartCoroutine());
     }
 
