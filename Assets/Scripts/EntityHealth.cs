@@ -9,11 +9,12 @@ public class EntityHealth : MonoBehaviour {
 
     public float CurrentHealth { get; private set; }
     public int PlayerIndex { get; private set; }
+
+    private bool _hasBeenHit = false;
     private float _lastHitTime = -1f;
     
 
     private void Awake() {
-        PlayerIndex = gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
         CurrentHealth = BaseHealth;
     }
 
@@ -26,6 +27,11 @@ public class EntityHealth : MonoBehaviour {
     }
 
     private void HandleEntityHit(EntityHealth entityHealth, float damage) {
+        if (!_hasBeenHit){
+            PlayerIndex = gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
+            _hasBeenHit = true;
+        }
+        
         if(_lastHitTime + _hitCooldown > Time.time) return;
         if (entityHealth.PlayerIndex != PlayerIndex) return;
 

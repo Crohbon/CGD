@@ -19850,9 +19850,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbfb23717f7dee14688bccda60b77b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _maxDamageReduction: 0
+  _shotsWithoutDamageReduction: 0
+  _shotsForMaxDamageReduction: 0
+  _minBulletDropRange: 0
+  _maxBulletDropRange: 0
+  _shotsWithoutBulletDrop: 0
+  _shotsForMinBulletDropRange: 0
+  _jumpsWithoutHitBoxIncrease: 0
+  _jumpsForMaxHitBoxIncrease: 0
+  _maxHitBoxSizeMultiplier: 0
+  _shotsPerControlsInvert: 0
   _characterBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.45, y: 0.65, z: 0}
+  _playerCollider: {fileID: 0}
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -19929,8 +19941,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4ebd7ca186c70824e857024a2b583aae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BaseHealth: 10
   _hitCooldown: 0.5
+  _baseHealth: 10
 --- !u!1 &6432609861764478824
 GameObject:
   m_ObjectHideFlags: 0

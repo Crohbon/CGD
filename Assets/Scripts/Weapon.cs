@@ -33,12 +33,13 @@ public class Weapon : MonoBehaviour {
         GameEvents.Instance.OnWeaponPickUp(_attachedPlayerIndex, this);
     }
 
-    public void ShootWeapon() {
+    public void ShootWeapon(float damageMultiplier, float bulletDropRange) {
         if (Time.time - _lastShotTime > shotCd){
-            GameObject spawnedBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, transform.rotation);
-            spawnedBullet.GetComponent<Bullet>().Damage = weaponDmg;
-            ammo--;
+            Bullet spawnedBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, transform.rotation).GetComponent<Bullet>();
+            spawnedBullet.Damage = weaponDmg * damageMultiplier;
+            spawnedBullet.BulletDropRange = bulletDropRange;
             
+            ammo--;
             GameEvents.Instance.OnWeaponShot(_attachedPlayerIndex);
             
             if (ammo <= 0){

@@ -4,13 +4,20 @@ using System.Linq;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    private List<int> _winPoints;
+    
+    public static GameManager Instance { get; private set; }
+    
+    public  List<int> WinPoints { get; private set; }
     private List<bool> _alivePlayers;
 
     private int _playerAmount;
     private Coroutine _roundStartCoroutine;
 
     private void Awake() {
+        if (Instance == null){
+            Instance = this;
+        }
+
         InitializeGame();
     }
 
@@ -30,9 +37,9 @@ public class GameManager : MonoBehaviour {
         if (_alivePlayers.Count(playerAlive => playerAlive) > 1) return;
 
         int lastPlayerIndex = _alivePlayers.IndexOf(true);
-        _winPoints[lastPlayerIndex]++;
+        WinPoints[lastPlayerIndex]++;
 
-        if (_winPoints.Any(playerPoints => playerPoints >= Settings.PointsPerHandicap * Settings.TotalHandicapTiers)){
+        if (WinPoints.Any(playerPoints => playerPoints >= Settings.PointsPerHandicap * Settings.TotalHandicapTiers)){
             GameEvents.Instance.OnPlayerGameWin(lastPlayerIndex);
         }
         else{
@@ -46,9 +53,9 @@ public class GameManager : MonoBehaviour {
 
     private void InitializeGame() {
         _playerAmount = PlayerConfigurationManager.Instance.GetPlayerConfigs().Count;
-        _winPoints = new List<int>();
+        WinPoints = new List<int>();
         for (int i = 0; i < _playerAmount; i++){
-            _winPoints.Add(0);
+            WinPoints.Add(0);
         }
         StartRound();
     }

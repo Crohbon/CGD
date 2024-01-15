@@ -3,8 +3,10 @@ using UnityEngine;
 public class Bullet : MonoBehaviour {
     public float Damage;
     public float BulletSpeed;
+    public float BulletDropRange;
 
     private Transform _bulletTransform;
+    private float _distanceTraveled = 0f;
     
     private void Awake() {
         _bulletTransform = transform;
@@ -18,6 +20,18 @@ public class Bullet : MonoBehaviour {
     }
 
     private void Update() {
-        _bulletTransform.position += BulletSpeed * Time.deltaTime * _bulletTransform.up;
+        if (BulletDropRange > 0){
+            if (_distanceTraveled > BulletDropRange){
+                _bulletTransform.position += BulletSpeed * Time.deltaTime * (_bulletTransform.up + (_bulletTransform.right * _distanceTraveled/BulletDropRange));
+                _distanceTraveled += (BulletSpeed * Time.deltaTime * _bulletTransform.up).magnitude;
+            }
+            else{
+                _bulletTransform.position += BulletSpeed * Time.deltaTime * _bulletTransform.up;
+                _distanceTraveled += (BulletSpeed * Time.deltaTime * _bulletTransform.up).magnitude;
+            }
+        }
+        else{
+            _bulletTransform.position += BulletSpeed * Time.deltaTime * _bulletTransform.up;
+        }
     }
 }
