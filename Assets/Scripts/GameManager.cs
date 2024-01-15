@@ -5,9 +5,7 @@ using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    [SerializeField] private Transform _scoreParent;
-    [SerializeField] private GameObject _scorePrefab;
-    private List<TextMeshProUGUI> _scoreTexts;
+    [SerializeField] private List<TextMeshProUGUI> _scoreTexts;
     private List<int> _winPoints;
     private List<bool> _alivePlayers;
 
@@ -55,9 +53,6 @@ public class GameManager : MonoBehaviour {
         _scoreTexts = new List<TextMeshProUGUI>();
         for (int i = 0; i < _playerAmount; i++){
             _winPoints.Add(0);
-            GameObject scoreEntry = Instantiate(_scorePrefab, _scoreParent);
-            _scoreTexts.Add(scoreEntry.GetComponentInChildren<TextMeshProUGUI>());
-            _scoreTexts[i].SetText("Player " + (i+1) + ": 0");
         }
         StartRound();
     }
@@ -66,6 +61,8 @@ public class GameManager : MonoBehaviour {
         _alivePlayers = new List<bool>();
         for (int i = 0; i < _playerAmount; i++){
             _alivePlayers.Add(true);
+            _scoreTexts[i].gameObject.SetActive(true);
+            _scoreTexts[i].SetText("Player " + (i + 1) + ": ");
         }
 
         if (_roundStartCoroutine != null){
