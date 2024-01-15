@@ -7,13 +7,13 @@ public class Weapon : MonoBehaviour {
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private float weaponDmg;
     [SerializeField] private float shotCd;
-    [SerializeField] private float ammo;
+    [SerializeField] private int ammo;
     [SerializeField] private string weaponName;
     
     private float _lastShotTime;
 
     private Transform _weaponTransform;
-    private int _attachedPlayerId = -1;
+    private int _attachedPlayerIndex = -1;
 
     private void Awake() {
         _weaponTransform = transform;
@@ -21,7 +21,7 @@ public class Weapon : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D col) {
         Debug.Log("triggered");
-        if (!col.CompareTag("Player") || _attachedPlayerId != -1) return;
+        if (!col.CompareTag("Player") || _attachedPlayerIndex != -1) return;
         PlayerController player = col.GetComponent<PlayerController>();
         if (player.IsHoldingWeapon) return;
         
@@ -29,17 +29,20 @@ public class Weapon : MonoBehaviour {
         _weaponTransform.localPosition = Vector3.zero;
         _weaponTransform.up = player.transform.right * player.transform.localScale.x;
         
-        _attachedPlayerId = player.gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
-        GameEvents.Instance.OnWeaponPickUp(_attachedPlayerId, this);
+        _attachedPlayerIndex = player.gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
+        GameEvents.Instance.OnWeaponPickUp(_attachedPlayerIndex, this);
     }
 
     public void ShootWeapon() {
         if (Time.time - _lastShotTime > shotCd){
             GameObject spawnedBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, transform.rotation);
-            bulletPrefab.GetComponent<Bullet>().Damage = weaponDmg;
+            spawnedBullet.GetComponent<Bullet>().Damage = weaponDmg;
             ammo--;
+            
+            GameEvents.Instance.OnWeaponShot(_attachedPlayerIndex);
+            
             if (ammo <= 0){
-                GameEvents.Instance.OnWeaponIsEmpty(_attachedPlayerId);
+                GameEvents.Instance.OnWeaponIsEmpty(_attachedPlayerIndex);
                 Destroy(gameObject);
             }
 
@@ -48,5 +51,9 @@ public class Weapon : MonoBehaviour {
         else{
             Debug.Log(weaponName + " is on cooldown.");
         }
+    }
+
+    public int GetAmmunition() {
+        return ammo;
     }
 }

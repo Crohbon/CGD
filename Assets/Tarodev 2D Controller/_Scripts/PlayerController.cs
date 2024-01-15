@@ -63,8 +63,8 @@ namespace TarodevController {
             }
         }
 
-        private void HandleWeaponPickUp(int id, Weapon weaponToAttach) {
-            if (id != PlayerConfiguration.PlayerIndex) return;
+        private void HandleWeaponPickUp(int index, Weapon weaponToAttach) {
+            if (index != PlayerConfiguration.PlayerIndex) return;
             IsHoldingWeapon = true;
             _currentWeapon = weaponToAttach;
         }

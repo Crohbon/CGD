@@ -1,11 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using TMPro;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
-    [SerializeField] private List<TextMeshProUGUI> _scoreTexts;
     private List<int> _winPoints;
     private List<bool> _alivePlayers;
 
@@ -39,7 +37,6 @@ public class GameManager : MonoBehaviour {
         }
         else{
             GameEvents.Instance.OnPlayerRoundWin(lastPlayerIndex);
-            _scoreTexts[lastPlayerIndex].SetText("Player " + (lastPlayerIndex + 1) + ": " + _winPoints[lastPlayerIndex]);
             StartRound();
         }
         
@@ -50,7 +47,6 @@ public class GameManager : MonoBehaviour {
     private void InitializeGame() {
         _playerAmount = PlayerConfigurationManager.Instance.GetPlayerConfigs().Count;
         _winPoints = new List<int>();
-        _scoreTexts = new List<TextMeshProUGUI>();
         for (int i = 0; i < _playerAmount; i++){
             _winPoints.Add(0);
         }
@@ -61,8 +57,6 @@ public class GameManager : MonoBehaviour {
         _alivePlayers = new List<bool>();
         for (int i = 0; i < _playerAmount; i++){
             _alivePlayers.Add(true);
-            _scoreTexts[i].gameObject.SetActive(true);
-            _scoreTexts[i].SetText("Player " + (i + 1) + ": ");
         }
 
         if (_roundStartCoroutine != null){
