@@ -44,7 +44,7 @@ public class PlayerConfigurationManager : MonoBehaviour {
     public void ReadyPlayer(int index) {
         _playerConfigs[index].IsReady = true;
         if (_playerConfigs.Count >= Settings.MinPlayerAmount && _playerConfigs.All(player => player.IsReady)){
-            SceneManager.LoadScene("Testscene");
+            SceneManager.LoadScene("Level");
         }
     }
 }

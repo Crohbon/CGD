@@ -1306,7 +1306,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &291683941
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1866,7 +1866,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
+    m_SelectOnUp: {fileID: 1838168244}
     m_SelectOnDown: {fileID: 1178230516}
     m_SelectOnLeft: {fileID: 833724739}
     m_SelectOnRight: {fileID: 833724739}
@@ -2807,7 +2807,7 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 1178230516}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 1838168244}
     m_SelectOnLeft: {fileID: 1902462757}
     m_SelectOnRight: {fileID: 1902462757}
   m_Transition: 1
@@ -3480,7 +3480,7 @@ MonoBehaviour:
   m_Navigation:
     m_Mode: 4
     m_WrapAround: 0
-    m_SelectOnUp: {fileID: 0}
+    m_SelectOnUp: {fileID: 1838168244}
     m_SelectOnDown: {fileID: 1566432863}
     m_SelectOnLeft: {fileID: 391553724}
     m_SelectOnRight: {fileID: 391553724}
@@ -5091,6 +5091,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1388240317}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1186066169
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5756,6 +5768,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 1186066168}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Selectable, UnityEngine.UI
+        m_MethodName: Select
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1388240318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5809,7 +5833,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1498834335
 RectTransform:
   m_ObjectHideFlags: 0
@@ -7273,7 +7297,7 @@ MonoBehaviour:
     m_Mode: 4
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 1566432863}
-    m_SelectOnDown: {fileID: 0}
+    m_SelectOnDown: {fileID: 1838168244}
     m_SelectOnLeft: {fileID: 622220608}
     m_SelectOnRight: {fileID: 622220608}
   m_Transition: 1

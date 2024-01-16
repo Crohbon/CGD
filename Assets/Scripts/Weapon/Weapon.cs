@@ -1,5 +1,6 @@
 using TarodevController;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour {
 
@@ -20,14 +21,13 @@ public class Weapon : MonoBehaviour {
     }
 
     private void OnTriggerEnter2D(Collider2D col) {
-        Debug.Log("triggered");
         if (!col.CompareTag("Player") || _attachedPlayerIndex != -1) return;
         PlayerController player = col.GetComponent<PlayerController>();
         if (player.IsHoldingWeapon) return;
         
         _weaponTransform.SetParent(col.transform);
         _weaponTransform.localPosition = Vector3.zero;
-        _weaponTransform.up = player.transform.right * player.transform.localScale.x;
+        _weaponTransform.right = player.transform.right * player.transform.localScale.x;
         
         _attachedPlayerIndex = player.gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
         GameEvents.Instance.OnWeaponPickUp(_attachedPlayerIndex, this);
@@ -35,7 +35,7 @@ public class Weapon : MonoBehaviour {
 
     public void ShootWeapon(float damageMultiplier, float bulletDropRange) {
         if (Time.time - _lastShotTime > shotCd){
-            Bullet spawnedBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, transform.rotation).GetComponent<Bullet>();
+            Bullet spawnedBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<Bullet>();
             spawnedBullet.Damage = weaponDmg * damageMultiplier;
             spawnedBullet.BulletDropRange = bulletDropRange;
             

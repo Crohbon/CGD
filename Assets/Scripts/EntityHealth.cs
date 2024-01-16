@@ -1,5 +1,4 @@
-﻿using TarodevController;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EntityHealth : MonoBehaviour {
     [SerializeField] private float _hitCooldown = 0.5f;
@@ -8,9 +7,8 @@ public class EntityHealth : MonoBehaviour {
     public float BaseHealth => _baseHealth;
 
     public float CurrentHealth { get; private set; }
-    public int PlayerIndex { get; private set; }
+    public int PlayerIndex;
 
-    private bool _hasBeenHit = false;
     private float _lastHitTime = -1f;
     
 
@@ -27,11 +25,6 @@ public class EntityHealth : MonoBehaviour {
     }
 
     private void HandleEntityHit(EntityHealth entityHealth, float damage) {
-        if (!_hasBeenHit){
-            PlayerIndex = gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
-            _hasBeenHit = true;
-        }
-        
         if(_lastHitTime + _hitCooldown > Time.time) return;
         if (entityHealth.PlayerIndex != PlayerIndex) return;
 

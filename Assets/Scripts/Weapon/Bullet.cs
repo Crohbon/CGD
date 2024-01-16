@@ -22,7 +22,7 @@ public class Bullet : MonoBehaviour {
     private void Update() {
         if (BulletDropRange > 0){
             if (_distanceTraveled > BulletDropRange){
-                _bulletTransform.position += BulletSpeed * Time.deltaTime * (_bulletTransform.up + (_bulletTransform.right * _distanceTraveled/BulletDropRange));
+                _bulletTransform.position += BulletSpeed * Time.deltaTime * (_bulletTransform.up + (Vector3.down * (1 - (BulletDropRange/_distanceTraveled))));
                 _distanceTraveled += (BulletSpeed * Time.deltaTime * _bulletTransform.up).magnitude;
             }
             else{

@@ -25,6 +25,7 @@ public class PlayerSpawner : MonoBehaviour {
         for (int i = 0; i < _playerConfigurations.Count; i++){
             GameObject spawnedPlayer = Instantiate(_playerConfigurations[i].Character, _spawnTransforms[i].position, _spawnTransforms[i].rotation, transform);
             spawnedPlayer.GetComponent<PlayerController>().InitializePlayer(_playerConfigurations[i]);
+            spawnedPlayer.GetComponent<EntityHealth>().PlayerIndex = _playerConfigurations[i].PlayerIndex;
         }
     }
 }

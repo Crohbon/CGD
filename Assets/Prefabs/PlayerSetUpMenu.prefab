@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 4949849911132494451}
   - component: {fileID: 1732388337965967045}
   m_Layer: 0
-  m_Name: Orange
+  m_Name: Yellow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,14 +59,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.8920195, g: 1, b: 0, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e514862904bf1d04faf027514fe95e7f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 01a223308c99ded46b0cf5c927c9e58c, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -361,14 +361,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0, g: 0.19104338, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: eeaddc565e1ef9c44a4d6788cbb80b37, type: 3}
+  m_Sprite: {fileID: 21300000, guid: d63764162a152344dae2dc9bb32d6984, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1194,7 +1194,7 @@ GameObject:
   - component: {fileID: 5382665423682899334}
   - component: {fileID: 6762414442242612711}
   m_Layer: 0
-  m_Name: Green
+  m_Name: Orange
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1247,7 +1247,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: eeaddc565e1ef9c44a4d6788cbb80b37, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 544beca0e63d354469cd743812f5a4ec, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -1326,7 +1326,7 @@ GameObject:
   - component: {fileID: 5528938645660132138}
   - component: {fileID: 8152662808012447689}
   m_Layer: 0
-  m_Name: Red
+  m_Name: Green
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1379,7 +1379,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: e514862904bf1d04faf027514fe95e7f, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 80c02e347cc63d8498b9da26bbd4d359, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1

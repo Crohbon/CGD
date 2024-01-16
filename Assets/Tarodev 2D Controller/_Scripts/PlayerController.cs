@@ -107,8 +107,6 @@ namespace TarodevController {
             PlayerConfiguration.Input.onActionTriggered += HandleInput;
             _currentWinPoints = GameManager.Instance.WinPoints[playerConfiguration.PlayerIndex];
             switch (_currentWinPoints/Settings.PointsPerHandicap){
-                case 0:
-                    break;
                 case 1:
                     _hasDamageReductionHc = true;
                     break;
@@ -153,6 +151,7 @@ namespace TarodevController {
         [SerializeField] private float _shotsForMinBulletDropRange;
         [SerializeField] private float _jumpsWithoutHitBoxIncrease;
         [SerializeField] private float _jumpsForMaxHitBoxIncrease;
+        [SerializeField] private float _baseHitBoxSizeMultiplier;
         [SerializeField] private float _maxHitBoxSizeMultiplier;
         [SerializeField] private int _shotsPerControlsInvert;
         
@@ -163,9 +162,10 @@ namespace TarodevController {
             _jumpAmount++;
 
             if (!_hasBiggerHitBoxHc || !(_jumpAmount > _jumpsWithoutHitBoxIncrease)) return;
-
-            float hitBoxMultiplier = 1f + (_maxHitBoxSizeMultiplier * Mathf.Min(1, _jumpAmount/_jumpsForMaxHitBoxIncrease));
-            IncreaseHitBox(hitBoxMultiplier);
+            
+            float previousMultiplier = _baseHitBoxSizeMultiplier + ((_maxHitBoxSizeMultiplier - _baseHitBoxSizeMultiplier) * Mathf.Min(1, (_jumpAmount - 1f)/_jumpsForMaxHitBoxIncrease));
+            float hitBoxMultiplier = _baseHitBoxSizeMultiplier + ((_maxHitBoxSizeMultiplier - _baseHitBoxSizeMultiplier) * Mathf.Min(1, _jumpAmount/_jumpsForMaxHitBoxIncrease));
+            IncreaseHitBox(previousMultiplier, hitBoxMultiplier);
         }
 
         public void OnShoot(InputAction.CallbackContext context) {
@@ -311,9 +311,9 @@ namespace TarodevController {
             Gizmos.DrawWireCube(transform.position + move, _characterBounds.size);
         }
 
-        private void IncreaseHitBox(float sizeMultiplier) {
-            _characterBounds.size *= sizeMultiplier;
-            transform.localScale *= sizeMultiplier;
+        private void IncreaseHitBox(float previousMultiplier, float sizeMultiplier) {
+            _characterBounds.size = (_characterBounds.size/previousMultiplier) * sizeMultiplier;
+            transform.localScale = (transform.localScale/previousMultiplier) * sizeMultiplier;
         }
         
         #endregion
@@ -327,7 +327,7 @@ namespace TarodevController {
 
         private void CalculateWalk() {
             if (Input.X != 0) {
-                if (Input.X != 0) transform.localScale = new Vector3(Input.X > 0 ? 1 : -1, 1, 1);
+                if (Input.X != 0) transform.localScale = new Vector3(Input.X > 0 ? _baseHitBoxSizeMultiplier : -_baseHitBoxSizeMultiplier, _baseHitBoxSizeMultiplier, 1);
                 
                 // Set horizontal move speed
                 _currentHorizontalSpeed += Input.X * _acceleration * Time.deltaTime;

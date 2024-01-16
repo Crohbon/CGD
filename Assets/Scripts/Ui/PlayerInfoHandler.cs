@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -37,6 +36,8 @@ public class PlayerInfoHandler : MonoBehaviour {
     }
     
     private void HandlePlayerRoundWin(int lastPlayerIndex) {
+        _healthBar.SetValueWithoutNotify(0f);
+        
         if (lastPlayerIndex != _playerIndex) return;
         
         _winPointAmount++;
@@ -50,10 +51,10 @@ public class PlayerInfoHandler : MonoBehaviour {
         _playerAmmunitionText.SetText("" + _remainingAmmunition);
     }
     
-    private void HandlePlayerHit(EntityHealth entityHealth, float arg1) {
+    private void HandlePlayerHit(EntityHealth entityHealth, float damage) {
         if (entityHealth.PlayerIndex != _playerIndex) return;
 
-        _healthBar.SetValueWithoutNotify(Mathf.Min(1, 1 - (entityHealth.CurrentHealth / entityHealth.BaseHealth)));
+        _healthBar.SetValueWithoutNotify(Mathf.Min(1, 1 - ((entityHealth.CurrentHealth - damage) / entityHealth.BaseHealth)));
     }
     
     private void HandelWeaponShot(int attachedPlayerIndex) {
