@@ -21,7 +21,7 @@ public class PlayerSetupMenuController : MonoBehaviour {
     
     public void SetPlayerIndex(int playerIndex) {
         _playerIndex = playerIndex;
-        _titleText.SetText("Player " + (playerIndex + 1).ToString());
+        _titleText.SetText("Player " + (playerIndex + 1));
         _ignoreInputTime += Time.time;
     }
 

@@ -26,8 +26,11 @@ public class GameEvents : MonoBehaviour
     public UnityEvent<int,Weapon> weaponPickUp;
     public void OnWeaponPickUp(int playerIdToAttachTo, Weapon weaponToAttach) => weaponPickUp?.Invoke(playerIdToAttachTo, weaponToAttach);
     
+    public UnityEvent<int> weaponShot;
+    public void OnWeaponShot(int attachedPlayerIndex) => weaponShot?.Invoke(attachedPlayerIndex);
+    
     public UnityEvent<int> weaponIsEmpty;
-    public void OnWeaponIsEmpty(int phase) => weaponIsEmpty?.Invoke(phase);
+    public void OnWeaponIsEmpty(int attachedPlayerIndex) => weaponIsEmpty?.Invoke(attachedPlayerIndex);
     
     public UnityEvent<EntityHealth, float> playerHit;
     public void OnPlayerHit(EntityHealth entityHealth, float damage) => playerHit?.Invoke(entityHealth, damage);

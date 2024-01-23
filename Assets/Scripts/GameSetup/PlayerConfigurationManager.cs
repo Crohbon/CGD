@@ -26,7 +26,7 @@ public class PlayerConfigurationManager : MonoBehaviour {
         _playerInputManager?.playerJoinedEvent.RemoveListener(HandlePlayerJoin);
     }
 
-    public void HandlePlayerJoin(PlayerInput playerInput) {
+    private void HandlePlayerJoin(PlayerInput playerInput) {
         if (_playerConfigs.Any(player => player.PlayerIndex == playerInput.playerIndex)) return;
         playerInput.transform.SetParent(transform);
         _playerConfigs.Add(new PlayerConfiguration(playerInput));
@@ -44,7 +44,7 @@ public class PlayerConfigurationManager : MonoBehaviour {
     public void ReadyPlayer(int index) {
         _playerConfigs[index].IsReady = true;
         if (_playerConfigs.Count >= Settings.MinPlayerAmount && _playerConfigs.All(player => player.IsReady)){
-            SceneManager.LoadScene("Testscene");
+            SceneManager.LoadScene("Level");
         }
     }
 }

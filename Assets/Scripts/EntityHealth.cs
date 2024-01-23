@@ -1,15 +1,20 @@
-﻿using System;
-using TarodevController;
-using UnityEngine;
-using UnityEngine.InputSystem;
-using UnityEngine.Serialization;
+﻿using UnityEngine;
 
 public class EntityHealth : MonoBehaviour {
-    public float BaseHealth = 10f;
-    public float _currentHealth { get; private set; }
-    //[SerializeField] private GameObject _healthBar;
     [SerializeField] private float _hitCooldown = 0.5f;
+    [SerializeField] private float _baseHealth = 10f;
+
+    public float BaseHealth => _baseHealth;
+
+    public float CurrentHealth { get; private set; }
+    public int PlayerIndex;
+
     private float _lastHitTime = -1f;
+    
+
+    private void Awake() {
+        CurrentHealth = BaseHealth;
+    }
 
     private void OnEnable() {
         GameEvents.Instance.playerHit.AddListener(HandleEntityHit);
@@ -21,14 +26,14 @@ public class EntityHealth : MonoBehaviour {
 
     private void HandleEntityHit(EntityHealth entityHealth, float damage) {
         if(_lastHitTime + _hitCooldown > Time.time) return;
-        if (!entityHealth.Equals(this)) return;
+        if (entityHealth.PlayerIndex != PlayerIndex) return;
 
-        _currentHealth -= damage;
+        CurrentHealth -= damage;
         _lastHitTime = Time.time;
         
-        if ((_currentHealth > 0f)) return;
+        if ((CurrentHealth > 0f)) return;
         
-        GameEvents.Instance.OnPlayerDeath(gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex);
+        GameEvents.Instance.OnPlayerDeath(PlayerIndex);
         Destroy(gameObject);
     }
 }
