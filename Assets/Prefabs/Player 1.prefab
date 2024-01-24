@@ -19815,6 +19815,7 @@ GameObject:
   - component: {fileID: 6432609860406773168}
   - component: {fileID: 7949781358510413519}
   - component: {fileID: 4719529403345013136}
+  - component: {fileID: 7114576559309081678}
   m_Layer: 0
   m_Name: Player 1
   m_TagString: Player
@@ -19944,6 +19945,25 @@ MonoBehaviour:
   _hitCooldown: 0.5
   _baseHealth: 50
   PlayerIndex: 0
+--- !u!114 &7114576559309081678
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6432609860406773169}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c7d475c1d053afb4aad88c7ff79f6729, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerHitSounds:
+  - {fileID: 8300000, guid: fe7639f0e8caa81429f84793528e5043, type: 3}
+  - {fileID: 8300000, guid: a0689427afc67be4aa86a5e566912251, type: 3}
+  - {fileID: 8300000, guid: 53b015e26cc6b3e418aa2ec915678daf, type: 3}
+  - {fileID: 8300000, guid: 072e614ccc33f9546a6f02713e177642, type: 3}
+  - {fileID: 8300000, guid: 80d4be9e63ee84241977d1838058f66a, type: 3}
+  playerFallSound: {fileID: 8300000, guid: 547a7af6c1204084ab6d6fd12aba8965, type: 3}
 --- !u!1 &6432609861764478824
 GameObject:
   m_ObjectHideFlags: 0
