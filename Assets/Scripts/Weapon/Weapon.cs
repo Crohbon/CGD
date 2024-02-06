@@ -26,7 +26,7 @@ public class Weapon : MonoBehaviour {
         if (player.IsHoldingWeapon) return;
         
         _weaponTransform.SetParent(col.transform);
-        _weaponTransform.localPosition = Vector3.zero;
+        _weaponTransform.localPosition = new Vector3(0f,-0.3f,0f);
         _weaponTransform.right = player.transform.right * player.transform.localScale.x;
         
         _attachedPlayerIndex = player.gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
