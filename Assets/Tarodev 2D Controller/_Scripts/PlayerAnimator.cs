@@ -19,12 +19,15 @@ namespace TarodevController {
         [SerializeField, Range(1f, 3f)] private float _maxIdleSpeed = 2;
         [SerializeField] private float _maxParticleFallSpeed = -40;
 
-        private IPlayerController _player;
+        private PlayerController _player;
+        private int _playerIndex = -1;
         private bool _playerGrounded;
         private ParticleSystem.MinMaxGradient _currentGradient;
         private Vector2 _movement;
 
-        void Awake() => _player = GetComponentInParent<IPlayerController>();
+        void Awake() {
+            _player = GetComponentInParent<PlayerController>();
+        }
 
         void Update() {
             if (_player == null) return;
@@ -38,12 +41,6 @@ namespace TarodevController {
 
             // Speed up idle while running
             _anim.SetFloat(IdleSpeedKey, Mathf.Lerp(1, _maxIdleSpeed, Mathf.Abs(_player.Input.X)));
-
-            // Splat
-            if (_player.LandingThisFrame) {
-                _anim.SetTrigger(GroundedKey);
-                _source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
-            }
 
             // Jump effects
             if (_player.JumpingThisFrame) {
@@ -81,12 +78,19 @@ namespace TarodevController {
             _movement = _player.RawMovement; // Previous frame movement is more valuable
         }
 
-        private void OnDisable() {
-            _moveParticles.Stop();
-        }
-
         private void OnEnable() {
             _moveParticles.Play();
+            GameEvents.Instance.playerLanded.AddListener(HandlePlayerLand);
+        }
+        
+        private void OnDisable() {
+            _moveParticles.Stop();
+            GameEvents.Instance?.playerLanded.RemoveListener(HandlePlayerLand);
+        }
+
+        private void HandlePlayerLand() {
+            _anim.SetTrigger(GroundedKey);
+            _source.PlayOneShot(_footsteps[Random.Range(0, _footsteps.Length)]);
         }
 
         void SetColor(ParticleSystem ps) {

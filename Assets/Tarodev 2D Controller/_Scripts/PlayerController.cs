@@ -24,6 +24,7 @@ namespace TarodevController {
         
         public bool JumpingThisFrame { get; private set; }
         public bool LandingThisFrame { get; private set; }
+        public bool HasLanded { get; private set; }
         public Vector3 RawMovement { get; private set; }
         public bool Grounded => _colDown;
         
@@ -72,7 +73,7 @@ namespace TarodevController {
         }
 
         #endregion
-        private void Update() {
+        private void FixedUpdate() {
             if(!_active) return;
             // Calculate velocity
             Velocity = (transform.position - _lastPosition) / Time.deltaTime;
@@ -247,6 +248,16 @@ namespace TarodevController {
                     _coyoteUsable = true; // Only trigger when first touching
                     LandingThisFrame = true;
                     break;
+            }
+
+            if (LandingThisFrame){
+                if (!HasLanded){
+                    HasLanded = true;
+                    GameEvents.Instance.OnPlayerLanded();
+                }
+            }
+            else{
+                HasLanded = false;
             }
 
             _colDown = groundedCheck;

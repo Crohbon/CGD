@@ -35,6 +35,9 @@ public class GameEvents : MonoBehaviour
     public UnityEvent<EntityHealth, float> playerHit;
     public void OnPlayerHit(EntityHealth entityHealth, float damage) => playerHit?.Invoke(entityHealth, damage);
     
+    public UnityEvent playerLanded;
+    public void OnPlayerLanded() => playerLanded?.Invoke();
+    
     public UnityEvent<int> playerDeath;
     public void OnPlayerDeath(int id) => playerDeath?.Invoke(id);
 
