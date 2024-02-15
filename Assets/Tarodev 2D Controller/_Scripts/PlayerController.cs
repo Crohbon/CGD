@@ -130,9 +130,10 @@ namespace TarodevController {
             if (context.action.name == _playerControls.PlayerInput.Move.name) OnMove(context);
             if (context.action.name == _playerControls.PlayerInput.Jump.name) OnJump(context);
             if (context.action.name == _playerControls.PlayerInput.Shoot.name) OnShoot(context);
+            if (context.action.name == _playerControls.PlayerInput.Pause.name) OnPause(context);
         }
 
-        public void OnMove(InputAction.CallbackContext context) {
+        private void OnMove(InputAction.CallbackContext context) {
             _moveInput = context.ReadValue<Vector2>().x;
             if (context.canceled){
                 _moveInput = 0f;
@@ -155,8 +156,10 @@ namespace TarodevController {
         [SerializeField] private float _baseHitBoxSizeMultiplier;
         [SerializeField] private float _maxHitBoxSizeMultiplier;
         [SerializeField] private int _shotsPerControlsInvert;
+
+        private float _sizeMultiplier = 1f;
         
-        public void OnJump(InputAction.CallbackContext context) {
+        private void OnJump(InputAction.CallbackContext context) {
             _jumpPressed = context.performed;
             _jumpReleased = context.canceled;
 
@@ -165,11 +168,11 @@ namespace TarodevController {
             if (!_hasBiggerHitBoxHc || !(_jumpAmount > _jumpsWithoutHitBoxIncrease)) return;
             
             float previousMultiplier = _baseHitBoxSizeMultiplier + ((_maxHitBoxSizeMultiplier - _baseHitBoxSizeMultiplier) * Mathf.Min(1, (_jumpAmount - 1f)/_jumpsForMaxHitBoxIncrease));
-            float hitBoxMultiplier = _baseHitBoxSizeMultiplier + ((_maxHitBoxSizeMultiplier - _baseHitBoxSizeMultiplier) * Mathf.Min(1, _jumpAmount/_jumpsForMaxHitBoxIncrease));
-            IncreaseHitBox(previousMultiplier, hitBoxMultiplier);
+            _sizeMultiplier = _baseHitBoxSizeMultiplier + ((_maxHitBoxSizeMultiplier - _baseHitBoxSizeMultiplier) * Mathf.Min(1, _jumpAmount/_jumpsForMaxHitBoxIncrease));
+            IncreaseHitBox(previousMultiplier, _sizeMultiplier);
         }
 
-        public void OnShoot(InputAction.CallbackContext context) {
+        private void OnShoot(InputAction.CallbackContext context) {
             if (!IsHoldingWeapon) return;
             
             _shotAmount++;
@@ -188,6 +191,10 @@ namespace TarodevController {
             }
             
             _currentWeapon.ShootWeapon(damageMultiplier, bulletDropRange);
+        }
+
+        private void OnPause(InputAction.CallbackContext context) {
+            GameEvents.Instance.OnPauseGame(true);
         }
 
         #endregion
@@ -338,7 +345,9 @@ namespace TarodevController {
 
         private void CalculateWalk() {
             if (Input.X != 0) {
-                if (Input.X != 0) transform.localScale = new Vector3(Input.X > 0 ? _baseHitBoxSizeMultiplier : -_baseHitBoxSizeMultiplier, _baseHitBoxSizeMultiplier, 1);
+                if (Input.X != 0) transform.localScale = new Vector3(Input.X > 0 ? 
+                    _baseHitBoxSizeMultiplier * _sizeMultiplier : -_baseHitBoxSizeMultiplier * _sizeMultiplier, 
+                    _baseHitBoxSizeMultiplier * _sizeMultiplier, 1);
                 
                 // Set horizontal move speed
                 _currentHorizontalSpeed += Input.X * _acceleration * Time.deltaTime;

@@ -23,6 +23,7 @@ public class PlayerInfoHandler : MonoBehaviour {
 
     private void OnEnable() {
         GameEvents.Instance.playerRoundWin.AddListener(HandlePlayerRoundWin);
+        GameEvents.Instance.roundStart.AddListener(HandleRoundStart);
         GameEvents.Instance.weaponPickUp.AddListener(HandleWeaponPickUp);
         GameEvents.Instance.playerHit.AddListener(HandlePlayerHit);
         GameEvents.Instance.weaponShot.AddListener(HandelWeaponShot);
@@ -30,18 +31,21 @@ public class PlayerInfoHandler : MonoBehaviour {
 
     private void OnDisable() {
         GameEvents.Instance?.playerRoundWin.RemoveListener(HandlePlayerRoundWin);
+        GameEvents.Instance?.roundStart.RemoveListener(HandleRoundStart);
         GameEvents.Instance?.weaponPickUp.RemoveListener(HandleWeaponPickUp);
         GameEvents.Instance?.playerHit.RemoveListener(HandlePlayerHit);
         GameEvents.Instance?.weaponShot.RemoveListener(HandelWeaponShot);
     }
     
     private void HandlePlayerRoundWin(int lastPlayerIndex) {
-        _healthBar.SetValueWithoutNotify(0f);
-        
         if (lastPlayerIndex != _playerIndex) return;
         
         _winPointAmount++;
         _playerWinPointsText.SetText("" + _winPointAmount);
+    }
+
+    private void HandleRoundStart() {
+        _healthBar.SetValueWithoutNotify(0f);
     }
 
     private void HandleWeaponPickUp(int index, Weapon weaponToAttach) {

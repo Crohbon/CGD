@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -14,24 +13,33 @@ public class LevelUIHandler : MonoBehaviour {
     [SerializeField] private List<Sprite> _handicapSprites;
     [SerializeField] private TextMeshProUGUI _handicapText;
 
+    [SerializeField] private Transform _pauseScreen;
+    [SerializeField] private Button _resumeButton; 
+    [SerializeField] private Button _quitToMainMenutButton; 
+        
     [SerializeField] private Transform _gameEndScreen;
     [SerializeField] private TextMeshProUGUI _gameWinText;
-    [SerializeField] private Button _mainMenuButton;
+    [SerializeField] private Button _returnToMainMenuButton;
 
     private void Awake() {
-        _mainMenuButton.onClick.AddListener(LoadMainMenu);
+        _resumeButton.onClick.AddListener(ResumeGame);
+        _quitToMainMenutButton.onClick.AddListener(LoadMainMenu);
+        _returnToMainMenuButton.onClick.AddListener(LoadMainMenu);
+        
     }
 
     private void OnEnable() {
         GameEvents.Instance.playerRoundWin.AddListener(HandlePlayerRoundWin);
         GameEvents.Instance.roundStart.AddListener(HandleRoundStart);
         GameEvents.Instance.playerGameWin.AddListener(HandlePlayerGameWin);
+        GameEvents.Instance.pauseGame.AddListener(HandlePauseGame);
     }
 
     private void OnDisable() {
         GameEvents.Instance?.playerRoundWin.RemoveListener(HandlePlayerRoundWin);
         GameEvents.Instance?.roundStart.RemoveListener(HandleRoundStart);
         GameEvents.Instance?.playerGameWin.RemoveListener(HandlePlayerGameWin);
+        GameEvents.Instance?.pauseGame.RemoveListener(HandlePauseGame);
     }
 
     private void HandlePlayerRoundWin(int playerIndex) {
@@ -72,10 +80,22 @@ public class LevelUIHandler : MonoBehaviour {
         Destroy(PlayerConfigurationManager.Instance.gameObject);
         _gameEndScreen.gameObject.SetActive(true);
         _gameWinText.SetText("Player " + (playerIndex + 1) + " won the turf war");
-        _mainMenuButton.Select();
+        _returnToMainMenuButton.Select();
+    }
+    
+    private void HandlePauseGame(bool pauseState) {
+        _pauseScreen.gameObject.SetActive(pauseState);
+        if (pauseState){
+            _resumeButton.Select();
+        }
+    }
+
+    public void ResumeGame() {
+        GameEvents.Instance.OnPauseGame(false);
     }
     
     private void LoadMainMenu() {
         SceneManager.LoadScene("MainMenu");
+        Destroy(PlayerConfigurationManager.Instance.gameObject);
     }
 }

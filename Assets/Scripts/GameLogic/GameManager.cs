@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour {
     public  List<int> WinPoints { get; private set; }
     private List<bool> _alivePlayers;
 
+    private bool _isPaused = false;
     private int _playerAmount;
     private Coroutine _roundStartCoroutine;
 
@@ -25,16 +26,18 @@ public class GameManager : MonoBehaviour {
 
     private void OnEnable() {
         GameEvents.Instance.playerDeath.AddListener(HandlePlayerDeath);
+        GameEvents.Instance.pauseGame.AddListener(HandlePauseGame);
     }
 
     private void OnDisable() {
         GameEvents.Instance?.playerDeath.RemoveListener(HandlePlayerDeath);
+        GameEvents.Instance?.pauseGame.RemoveListener(HandlePauseGame);
     }
 
     private void HandlePlayerDeath(int playerIndex) {
         _alivePlayers[playerIndex] = false;
 
-        if (_alivePlayers.Count(playerAlive => playerAlive) > 1) return;
+        if (_alivePlayers.Count(playerAlive => playerAlive) != 1) return;
 
         int lastPlayerIndex = _alivePlayers.IndexOf(true);
         WinPoints[lastPlayerIndex]++;
@@ -61,19 +64,24 @@ public class GameManager : MonoBehaviour {
     }
 
     private void StartRound() {
-        _alivePlayers = new List<bool>();
-        for (int i = 0; i < _playerAmount; i++){
-            _alivePlayers.Add(true);
-        }
-
         if (_roundStartCoroutine != null){
             StopCoroutine(_roundStartCoroutine);
         }
         _roundStartCoroutine = StartCoroutine(RoundStartCoroutine());
     }
 
+    private void HandlePauseGame(bool pauseState) {
+        _isPaused = pauseState;
+        Time.timeScale = pauseState ? 0 : 1;
+    }
+
     private IEnumerator RoundStartCoroutine() {
         yield return new WaitForSeconds(3f);
+        
+        _alivePlayers = new List<bool>();
+        for (int i = 0; i < _playerAmount; i++){
+            _alivePlayers.Add(true);
+        }
         GameEvents.Instance.OnRoundStart();
     }
 }

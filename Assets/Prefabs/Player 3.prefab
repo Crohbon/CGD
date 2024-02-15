@@ -14990,13 +14990,13 @@ MonoBehaviour:
   _maxDamageReduction: 0.6
   _shotsWithoutDamageReduction: 3
   _shotsForMaxDamageReduction: 13
-  _minBulletDropRange: 10
-  _maxBulletDropRange: 30
+  _minBulletDropRange: 5
+  _maxBulletDropRange: 15
   _shotsWithoutBulletDrop: 2
   _shotsForMinBulletDropRange: 10
   _jumpsWithoutHitBoxIncrease: 5
   _jumpsForMaxHitBoxIncrease: 20
-  _baseHitBoxSizeMultiplier: 1.5
+  _baseHitBoxSizeMultiplier: 1.3
   _maxHitBoxSizeMultiplier: 3
   _shotsPerControlsInvert: 2
   _characterBounds:

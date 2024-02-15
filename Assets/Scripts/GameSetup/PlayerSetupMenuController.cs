@@ -8,7 +8,6 @@ public class PlayerSetupMenuController : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI _titleText;
     [SerializeField] private GameObject _readyPanel;
     [SerializeField] private GameObject _menuPanel;
-    [SerializeField] private Button _readyButton;
 
     private float _ignoreInputTime = 1.5f;
     private bool _inputEnabled;
@@ -28,14 +27,8 @@ public class PlayerSetupMenuController : MonoBehaviour {
     public void SetPlayerCharacter(GameObject prefab) {
         if (!_inputEnabled) return;
         PlayerConfigurationManager.Instance.SetPlayerCharacter(_playerIndex, prefab);
-        _readyPanel.SetActive(true);
-        _readyButton.Select();
-        _menuPanel.SetActive(false);
-    }
-
-    public void ReadyPlayer() {
-        if (!_inputEnabled) return;
         PlayerConfigurationManager.Instance.ReadyPlayer(_playerIndex);
-        _readyButton.gameObject.SetActive(false);
+        _readyPanel.SetActive(true);
+        _menuPanel.SetActive(false);
     }
 }

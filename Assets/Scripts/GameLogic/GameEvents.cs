@@ -49,4 +49,7 @@ public class GameEvents : MonoBehaviour
     
     public UnityEvent<int> playerGameWin;
     public void OnPlayerGameWin(int id) => playerGameWin?.Invoke(id);
+
+    public UnityEvent<bool> pauseGame;
+    public void OnPauseGame(bool isPaused) => pauseGame?.Invoke(isPaused);
 }

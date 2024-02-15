@@ -7,6 +7,7 @@ public class EntityHealth : MonoBehaviour {
     public float BaseHealth => _baseHealth;
 
     public float CurrentHealth { get; private set; }
+    [HideInInspector]
     public int PlayerIndex;
 
     private float _lastHitTime = -1f;
