@@ -19851,9 +19851,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbfb23717f7dee14688bccda60b77b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDamageReduction: 0.6
-  _shotsWithoutDamageReduction: 3
-  _shotsForMaxDamageReduction: 13
+  _maxDamageReduction: 0.4
+  _shotsWithoutDamageReduction: 5
+  _shotsForMaxDamageReduction: 20
   _minBulletDropRange: 5
   _maxBulletDropRange: 15
   _shotsWithoutBulletDrop: 2
