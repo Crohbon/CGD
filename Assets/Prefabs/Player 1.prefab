@@ -19860,7 +19860,7 @@ MonoBehaviour:
   _shotsForMinBulletDropRange: 10
   _jumpsWithoutHitBoxIncrease: 5
   _jumpsForMaxHitBoxIncrease: 20
-  _baseHitBoxSizeMultiplier: 1.3
+  _baseHitBoxSizeMultiplier: 1.5
   _maxHitBoxSizeMultiplier: 3
   _shotsPerControlsInvert: 2
   _characterBounds:

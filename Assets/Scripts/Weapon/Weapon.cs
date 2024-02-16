@@ -27,8 +27,15 @@ public class Weapon : MonoBehaviour {
         
         _weaponTransform.SetParent(col.transform);
         _weaponTransform.localPosition = new Vector3(0f,-0.3f,0f);
-        _weaponTransform.right = player.transform.right * player.transform.localScale.x;
         
+        Vector3 playerLocalScale = player.transform.localScale;
+        _weaponTransform.right = player.transform.right * playerLocalScale.x;
+        
+        Vector3 weaponLocalsScale = _weaponTransform.localScale;
+        _weaponTransform.localScale = new Vector3(weaponLocalsScale.x * Mathf.Abs(playerLocalScale.x/1.5f), 
+            weaponLocalsScale.y * (playerLocalScale.y/1.5f), 1); 
+        
+
         _attachedPlayerIndex = player.gameObject.GetComponent<PlayerController>().PlayerConfiguration.PlayerIndex;
         GameEvents.Instance.OnWeaponPickUp(_attachedPlayerIndex, this);
     }
