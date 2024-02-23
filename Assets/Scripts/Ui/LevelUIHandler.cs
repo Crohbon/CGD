@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Serialization;
 using UnityEngine.UI;
 
 public class LevelUIHandler : MonoBehaviour {
@@ -15,7 +16,7 @@ public class LevelUIHandler : MonoBehaviour {
 
     [SerializeField] private Transform _pauseScreen;
     [SerializeField] private Button _resumeButton; 
-    [SerializeField] private Button _quitToMainMenutButton; 
+    [SerializeField] private Button _quitToMainMenuButton; 
         
     [SerializeField] private Transform _gameEndScreen;
     [SerializeField] private TextMeshProUGUI _gameWinText;
@@ -23,7 +24,7 @@ public class LevelUIHandler : MonoBehaviour {
 
     private void Awake() {
         _resumeButton.onClick.AddListener(ResumeGame);
-        _quitToMainMenutButton.onClick.AddListener(LoadMainMenu);
+        _quitToMainMenuButton.onClick.AddListener(LoadMainMenu);
         _returnToMainMenuButton.onClick.AddListener(LoadMainMenu);
         
     }

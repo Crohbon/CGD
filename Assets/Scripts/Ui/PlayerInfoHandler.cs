@@ -1,9 +1,11 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class PlayerInfoHandler : MonoBehaviour {
     [SerializeField] private GameObject _visuals;
+    [SerializeField] private List<GameObject> _handicapVisuals;
     [SerializeField] private int _playerIndex;
     [SerializeField] private TextMeshProUGUI _playerAmmunitionText;
     [SerializeField] private TextMeshProUGUI _playerWinPointsText;
@@ -46,6 +48,24 @@ public class PlayerInfoHandler : MonoBehaviour {
 
     private void HandleRoundStart() {
         _healthBar.SetValueWithoutNotify(0f);
+        
+        switch (GameManager.Instance.WinPoints[_playerIndex]/Settings.PointsPerHandicap){
+            case 1:
+                _handicapVisuals[0].SetActive(true);
+                break;
+            case 2:
+                _handicapVisuals[1].SetActive(true);
+                break;
+            case 3:
+                _handicapVisuals[2].SetActive(true);
+                break;
+            case 4:
+                _handicapVisuals[0].SetActive(false);
+                _handicapVisuals[1].SetActive(false);
+                _handicapVisuals[2].SetActive(false);
+                _handicapVisuals[3].SetActive(true);
+                break;
+        }
     }
 
     private void HandleWeaponPickUp(int index, Weapon weaponToAttach) {

@@ -13,16 +13,16 @@ public class PlayerSpawner : MonoBehaviour {
             ParticleSystem particleSystem = _spawnTransforms[i].gameObject.GetComponent<ParticleSystem>(); 
             
             switch (_playerConfigurations[i].Character.name){
-                case "Player_1":
+                case "Character_1":
                     particleSystem.startColor = new Color(0.188f, 0.329f, 0.451f);
                     break;
-                case "Player_2":
+                case "Character_2":
                     particleSystem.startColor = new Color(0.294f, 0.388f, 0.172f);
                     break;
-                case "Player_3":
+                case "Character_3":
                     particleSystem.startColor = new Color(0.639f, 0.341f, 0.105f);
                     break;
-                case "Player_4":
+                case "Character_4":
                     particleSystem.startColor = new Color(0.768f, 0.615f, 0.247f);
                     break;
             }

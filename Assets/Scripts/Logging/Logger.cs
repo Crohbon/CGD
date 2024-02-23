@@ -27,7 +27,11 @@ public static class Logger {
     public static void LogHandicapsAfterRound(int playerIndex, int shotAmount, int jumpAmount, bool isWinningPlayer) {
         TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _handicapsLog + _gameCount, true);
 
-        switch (GameManager.Instance.WinPoints[playerIndex]){
+        int playerWinPoints = isWinningPlayer
+            ? GameManager.Instance.WinPoints[playerIndex] - 1
+            : GameManager.Instance.WinPoints[playerIndex];
+        
+        switch (playerWinPoints){
             case 0:
                 Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount 
                                     + false + "," + false + "," + false + "," + false + "," + false + "," + false + "," + false + "," + false);
@@ -57,10 +61,17 @@ public static class Logger {
                                     + false + "," + false);
                 break;
             case 4:
-                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount 
-                                    + false + "," + false + "," + false + "," + false + "," + false + "," + false + "," 
-                                    + (HandicapValues.ShotsPerControlsInvert > jumpAmount) + "," 
-                                    + (HandicapValues.ShotsPerControlsInvert/jumpAmount));
+                Logwriter.Write(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount
+                                + false + "," + false + "," + false + "," + false + "," + false + "," + false + ","
+                                + (HandicapValues.ShotsPerControlsInvert > jumpAmount) + ",");
+                if (jumpAmount > 0){
+                    Logwriter.WriteLine(HandicapValues.ShotsPerControlsInvert/jumpAmount);
+                }
+                else{
+                    Logwriter.WriteLine(false);
+                }
+
+                
                 break;
         }
 
