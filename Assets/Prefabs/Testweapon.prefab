@@ -136,7 +136,7 @@ MonoBehaviour:
   weaponDmg: 10
   shotCd: 0.2
   ammo: 3
-  weaponName: 
+  weaponName: Pistol
 --- !u!50 &3473822349846686004
 Rigidbody2D:
   serializedVersion: 4
