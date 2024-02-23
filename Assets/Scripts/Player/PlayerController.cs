@@ -175,7 +175,7 @@ public class PlayerController : MonoBehaviour, IPlayerController {
             damageMultiplier = 1 - (HandicapValues.MaxDamageReduction * Mathf.Min(1,_shotAmount / HandicapValues.ShotsForMaxDamageReduction));
         }
 
-        float bulletDropRange = HandicapValues.MaxBulletDropRange;
+        float bulletDropRange = -1f;
         if (_hasBulletDropHc && _shotAmount > HandicapValues.ShotsWithoutBulletDrop){
             bulletDropRange = HandicapValues.MinBulletDropRange + ((HandicapValues.MaxBulletDropRange - HandicapValues.MinBulletDropRange) 
                                                                    * (1 - Mathf.Min(1,_shotAmount/HandicapValues.ShotsForMinBulletDropRange)));

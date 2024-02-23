@@ -5904,7 +5904,7 @@ GameObject:
   m_Component:
   - component: {fileID: 206774581}
   - component: {fileID: 206774580}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Grid
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -18964,7 +18964,7 @@ GameObject:
   - component: {fileID: 907156299}
   - component: {fileID: 907156298}
   - component: {fileID: 907156297}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: LevelTiles
   m_TagString: Untagged
   m_Icon: {fileID: 0}

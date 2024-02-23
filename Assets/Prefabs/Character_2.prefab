@@ -19817,27 +19817,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bbfb23717f7dee14688bccda60b77b9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _maxDamageReduction: 0.4
-  _shotsWithoutDamageReduction: 5
-  _shotsForMaxDamageReduction: 20
-  _minBulletDropRange: 5
-  _maxBulletDropRange: 15
-  _shotsWithoutBulletDrop: 2
-  _shotsForMinBulletDropRange: 10
-  _jumpsWithoutHitBoxIncrease: 5
-  _jumpsForMaxHitBoxIncrease: 20
-  _baseHitBoxSizeMultiplier: 1.5
-  _maxHitBoxSizeMultiplier: 3
-  _shotsPerControlsInvert: 2
   _characterBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0.675, y: 0.975, z: 0}
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _detectorCount: 3
-  _detectionRayLength: 0.1
-  _rayBuffer: 0.1
+  _detectorCount: 5
+  _detectionRayLength: 0.5
+  _rayBuffer: 0.2
   _acceleration: 90
   _moveClamp: 13
   _deAcceleration: 60
@@ -19850,7 +19838,7 @@ MonoBehaviour:
   _coyoteTimeThreshold: 0.1
   _jumpBuffer: 0.1
   _jumpEndEarlyGravityModifier: 3
-  _freeColliderIterations: 20
+  _freeColliderIterations: 30
 --- !u!61 &7949781358510413519
 BoxCollider2D:
   m_ObjectHideFlags: 0
