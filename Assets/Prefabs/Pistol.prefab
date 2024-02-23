@@ -45,7 +45,7 @@ GameObject:
   - component: {fileID: 3473822349846686004}
   - component: {fileID: 5159027681396022780}
   m_Layer: 0
-  m_Name: Testweapon
+  m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,7 +135,8 @@ MonoBehaviour:
   bulletSpawnPoint: {fileID: 2129519163603825081}
   weaponDmg: 10
   shotCd: 0.2
-  ammo: 3
+  bulletSpeed: 20
+  ammo: 5
   weaponName: Pistol
 --- !u!50 &3473822349846686004
 Rigidbody2D:

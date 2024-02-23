@@ -6,6 +6,7 @@ public class Weapon : MonoBehaviour {
     [SerializeField] private Transform bulletSpawnPoint;
     [SerializeField] private float weaponDmg;
     [SerializeField] private float shotCd;
+    [SerializeField] private float bulletSpeed;
     [SerializeField] private int ammo;
     [SerializeField] private string weaponName;
     
@@ -45,6 +46,7 @@ public class Weapon : MonoBehaviour {
             spawnedBullet.BulletDropRange = bulletDropRange;
             spawnedBullet.WeaponName = weaponName;
             spawnedBullet.GunnerIndex = _attachedPlayerIndex;
+            spawnedBullet.BulletSpeed = bulletSpeed;
             
             ammo--;
             GameEvents.Instance.OnWeaponShot(_attachedPlayerIndex);

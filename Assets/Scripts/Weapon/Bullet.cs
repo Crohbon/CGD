@@ -1,10 +1,15 @@
 using UnityEngine;
 
 public class Bullet : MonoBehaviour {
+    [HideInInspector]
     public float Damage;
+    [HideInInspector]
     public float BulletSpeed;
+    [HideInInspector]
     public float BulletDropRange;
+    [HideInInspector]
     public string WeaponName;
+    [HideInInspector]
     public int GunnerIndex;
 
     private Transform _bulletTransform;

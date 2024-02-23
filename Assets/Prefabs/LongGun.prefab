@@ -101,8 +101,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   bulletPrefab: {fileID: 4954089936025768489, guid: 6f62bb4ae05a2dc4fa205c9cce5a1f3f, type: 3}
   bulletSpawnPoint: {fileID: 2129519163603825081, guid: e3e1d8f81b685694490c26eb76b4fe92, type: 3}
-  weaponDmg: 10
-  shotCd: 0.2
+  weaponDmg: 15
+  shotCd: 0.5
+  bulletSpeed: 30
   ammo: 3
   weaponName: LongGun
 --- !u!50 &2240419997225643425
