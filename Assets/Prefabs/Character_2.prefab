@@ -19838,7 +19838,7 @@ MonoBehaviour:
   _coyoteTimeThreshold: 0.1
   _jumpBuffer: 0.1
   _jumpEndEarlyGravityModifier: 3
-  _freeColliderIterations: 50
+  _freeColliderIterations: 90
 --- !u!61 &7949781358510413519
 BoxCollider2D:
   m_ObjectHideFlags: 0

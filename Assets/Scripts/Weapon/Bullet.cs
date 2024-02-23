@@ -42,5 +42,9 @@ public class Bullet : MonoBehaviour {
         else{
             _bulletTransform.position += BulletSpeed * Time.deltaTime * _bulletTransform.up;
         }
+
+        if (_distanceTraveled > 100f){
+            Destroy(gameObject);
+        }
     }
 }
