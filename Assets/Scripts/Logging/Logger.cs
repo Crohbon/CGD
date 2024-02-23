@@ -25,7 +25,7 @@ public static class Logger {
     }
 
     public static void LogHandicapsAfterRound(int playerIndex, int shotAmount, int jumpAmount, bool isWinningPlayer) {
-        TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _handicapsLog + _gameCount, true);
+        TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _handicapsLog + _gameCount + ".csv", true);
 
         int playerWinPoints = isWinningPlayer
             ? GameManager.Instance.WinPoints[playerIndex] - 1
