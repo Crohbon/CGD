@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TarodevController;
 using UnityEngine;
 
 public class PlayerSpawner : MonoBehaviour { 
@@ -8,6 +7,13 @@ public class PlayerSpawner : MonoBehaviour {
 
     private void Awake() {
         _playerConfigurations= PlayerConfigurationManager.Instance.GetPlayerConfigs();
+        for (int i = 0; i < _playerConfigurations.Count; i++){
+            _spawnTransforms[i].gameObject.SetActive(true);
+            switch (i){
+                
+            }
+            _spawnTransforms[i].gameObject.GetComponent<Material>().color = new Color();
+        }
     }
 
     private void OnEnable() {
