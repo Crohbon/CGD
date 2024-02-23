@@ -77,7 +77,6 @@ public class LevelUIHandler : MonoBehaviour {
     }
 
     private void HandlePlayerGameWin(int playerIndex) {
-        Destroy(PlayerConfigurationManager.Instance.gameObject);
         _gameEndScreen.gameObject.SetActive(true);
         _gameWinText.SetText("Player " + (playerIndex + 1) + " won the turf war");
         _returnToMainMenuButton.Select();
@@ -95,7 +94,7 @@ public class LevelUIHandler : MonoBehaviour {
     }
     
     private void LoadMainMenu() {
-        SceneManager.LoadScene("MainMenu");
         Destroy(PlayerConfigurationManager.Instance.gameObject);
+        SceneManager.LoadScene("MainMenu");
     }
 }

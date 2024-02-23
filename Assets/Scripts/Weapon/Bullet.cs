@@ -4,6 +4,8 @@ public class Bullet : MonoBehaviour {
     public float Damage;
     public float BulletSpeed;
     public float BulletDropRange;
+    public string WeaponName;
+    public int GunnerIndex;
 
     private Transform _bulletTransform;
     private float _distanceTraveled = 0f;
@@ -14,7 +16,9 @@ public class Bullet : MonoBehaviour {
 
     private void OnTriggerEnter2D(Collider2D other) {
         if (other.CompareTag("Player")){
-            GameEvents.Instance.OnPlayerHit(other.GetComponent<EntityHealth>(), Damage);
+            EntityHealth hitEntityHealth = other.GetComponent<EntityHealth>();
+            GameEvents.Instance.OnPlayerHit(hitEntityHealth, Damage);
+            Logger.LogWeaponImpact(GunnerIndex, WeaponName, Damage, hitEntityHealth.PlayerIndex, (hitEntityHealth.CurrentHealth - Damage) <= 0);
         }
         Destroy(gameObject);
     }

@@ -1,6 +1,4 @@
-using TarodevController;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class Weapon : MonoBehaviour {
 
@@ -45,9 +43,13 @@ public class Weapon : MonoBehaviour {
             Bullet spawnedBullet = Instantiate(bulletPrefab, bulletSpawnPoint.position, bulletSpawnPoint.rotation).GetComponent<Bullet>();
             spawnedBullet.Damage = weaponDmg * damageMultiplier;
             spawnedBullet.BulletDropRange = bulletDropRange;
+            spawnedBullet.WeaponName = weaponName;
+            spawnedBullet.GunnerIndex = _attachedPlayerIndex;
             
             ammo--;
             GameEvents.Instance.OnWeaponShot(_attachedPlayerIndex);
+            
+            Logger.LogWeaponUsage(_attachedPlayerIndex, weaponName, ammo);
             
             if (ammo <= 0){
                 GameEvents.Instance.OnWeaponIsEmpty(_attachedPlayerIndex);

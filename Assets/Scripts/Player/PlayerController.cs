@@ -51,6 +51,12 @@ public class PlayerController : MonoBehaviour, IPlayerController {
     private void OnEnable() {
         GameEvents.Instance.weaponIsEmpty.AddListener(HandleWeaponIsEmpty);
         GameEvents.Instance.weaponPickUp.AddListener(HandleWeaponPickUp);
+        GameEvents.Instance.playerRoundWin.AddListener(HandlePlayerRoundWin);
+    }
+
+    private void HandlePlayerRoundWin(int playerIndex) {
+        if (playerIndex != PlayerConfiguration.PlayerIndex) return;
+        Logger.LogHandicapsAfterRound(PlayerConfiguration.PlayerIndex, _shotAmount, _jumpAmount, true);
     }
 
     private void OnDisable() {
@@ -91,6 +97,7 @@ public class PlayerController : MonoBehaviour, IPlayerController {
 
     private void OnDestroy() {
         PlayerConfiguration.Input.onActionTriggered -= HandleInput;
+        Logger.LogHandicapsAfterRound(PlayerConfiguration.PlayerIndex, _shotAmount, _jumpAmount, false);
     }
 
     #region Controls
@@ -138,23 +145,8 @@ public class PlayerController : MonoBehaviour, IPlayerController {
         }
     }
     
-    [Header("Handicap values")]
     private int _shotAmount = 0;
     private int _jumpAmount = 0;
-    
-    [SerializeField] private float _maxDamageReduction;
-    [SerializeField] private float _shotsWithoutDamageReduction;
-    [SerializeField] private float _shotsForMaxDamageReduction;
-    [SerializeField] private float _minBulletDropRange;
-    [SerializeField] private float _maxBulletDropRange;
-    [SerializeField] private float _shotsWithoutBulletDrop;
-    [SerializeField] private float _shotsForMinBulletDropRange;
-    [SerializeField] private float _jumpsWithoutHitBoxIncrease;
-    [SerializeField] private float _jumpsForMaxHitBoxIncrease;
-    [SerializeField] private float _baseHitBoxSizeMultiplier;
-    [SerializeField] private float _maxHitBoxSizeMultiplier;
-    [SerializeField] private int _shotsPerControlsInvert;
-
     private float _sizeMultiplier = 1f;
     
     private void OnJump(InputAction.CallbackContext context) {
@@ -163,10 +155,14 @@ public class PlayerController : MonoBehaviour, IPlayerController {
 
         _jumpAmount++;
 
-        if (!_hasBiggerHitBoxHc || !(_jumpAmount > _jumpsWithoutHitBoxIncrease)) return;
+        if (!_hasBiggerHitBoxHc || !(_jumpAmount > HandicapValues.JumpsWithoutHitBoxIncrease)) return;
         
-        float previousMultiplier = _baseHitBoxSizeMultiplier + ((_maxHitBoxSizeMultiplier - _baseHitBoxSizeMultiplier) * Mathf.Min(1, (_jumpAmount - 1f)/_jumpsForMaxHitBoxIncrease));
-        _sizeMultiplier = _baseHitBoxSizeMultiplier + ((_maxHitBoxSizeMultiplier - _baseHitBoxSizeMultiplier) * Mathf.Min(1, _jumpAmount/_jumpsForMaxHitBoxIncrease));
+        float previousMultiplier = HandicapValues.BaseHitBoxSizeMultiplier 
+                                   + ((HandicapValues.MaxHitBoxSizeMultiplier - HandicapValues.BaseHitBoxSizeMultiplier) 
+                                      * Mathf.Min(1, (_jumpAmount - 1f)/HandicapValues.JumpsForMaxHitBoxIncrease));
+        _sizeMultiplier = HandicapValues.BaseHitBoxSizeMultiplier 
+                          + ((HandicapValues.MaxHitBoxSizeMultiplier - HandicapValues.BaseHitBoxSizeMultiplier) 
+                             * Mathf.Min(1, _jumpAmount/HandicapValues.JumpsForMaxHitBoxIncrease));
         IncreaseHitBox(previousMultiplier, _sizeMultiplier);
     }
 
@@ -175,16 +171,17 @@ public class PlayerController : MonoBehaviour, IPlayerController {
         
         _shotAmount++;
         float damageMultiplier = 1f;
-        if (_hasDamageReductionHc && _shotAmount > _shotsWithoutDamageReduction){
-            damageMultiplier = 1 - (_maxDamageReduction * Mathf.Min(1,_shotAmount / _shotsForMaxDamageReduction));
+        if (_hasDamageReductionHc && _shotAmount > HandicapValues.ShotsWithoutDamageReduction){
+            damageMultiplier = 1 - (HandicapValues.MaxDamageReduction * Mathf.Min(1,_shotAmount / HandicapValues.ShotsForMaxDamageReduction));
         }
 
-        float bulletDropRange = _maxBulletDropRange;
-        if (_hasBulletDropHc && _shotAmount > _shotsWithoutBulletDrop){
-            bulletDropRange = _minBulletDropRange + ((_maxBulletDropRange - _minBulletDropRange) * (1 - Mathf.Min(1,_shotAmount/_shotsForMinBulletDropRange)));
+        float bulletDropRange = HandicapValues.MaxBulletDropRange;
+        if (_hasBulletDropHc && _shotAmount > HandicapValues.ShotsWithoutBulletDrop){
+            bulletDropRange = HandicapValues.MinBulletDropRange + ((HandicapValues.MaxBulletDropRange - HandicapValues.MinBulletDropRange) 
+                                                                   * (1 - Mathf.Min(1,_shotAmount/HandicapValues.ShotsForMinBulletDropRange)));
         }
 
-        if (_hasInvertedControlsHc && _shotAmount % _shotsPerControlsInvert == 0){
+        if (_hasInvertedControlsHc && _shotAmount % HandicapValues.ShotsPerControlsInvert == 0){
             _hasInvertedMoveInput = !_hasInvertedMoveInput;
         }
         
@@ -345,7 +342,6 @@ public class PlayerController : MonoBehaviour, IPlayerController {
         if (Input.X != 0) {
             if (Input.X != 0) transform.localScale = new Vector3(Input.X > 0 ? Mathf.Abs(transform.localScale.x) : 
                 -Mathf.Abs(transform.localScale.x), transform.localScale.y, 1);
-            Debug.Log(_sizeMultiplier);
             
             // Set horizontal move speed
             _currentHorizontalSpeed += Input.X * _acceleration * Time.deltaTime;

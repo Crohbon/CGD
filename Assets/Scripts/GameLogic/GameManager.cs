@@ -10,7 +10,6 @@ public class GameManager : MonoBehaviour {
     public  List<int> WinPoints { get; private set; }
     private List<bool> _alivePlayers;
 
-    private bool _isPaused = false;
     private int _playerAmount;
     private Coroutine _roundStartCoroutine;
 
@@ -37,19 +36,23 @@ public class GameManager : MonoBehaviour {
     private void HandlePlayerDeath(int playerIndex) {
         _alivePlayers[playerIndex] = false;
 
-        if (_alivePlayers.Count(playerAlive => playerAlive) != 1) return;
+        if (_alivePlayers.Count(playerAlive => playerAlive) != 1){
+            Logger.LogGameState(false, false, _alivePlayers, WinPoints);
+            return;
+        }
 
         int lastPlayerIndex = _alivePlayers.IndexOf(true);
         WinPoints[lastPlayerIndex]++;
 
         if (WinPoints.Any(playerPoints => playerPoints >= Settings.PointsPerHandicap * Settings.TotalHandicapTiers)){
             GameEvents.Instance.OnPlayerGameWin(lastPlayerIndex);
+            Logger.LogGameState(false, true, _alivePlayers, WinPoints);
         }
         else{
             GameEvents.Instance.OnPlayerRoundWin(lastPlayerIndex);
+            Logger.LogGameState(true, false, _alivePlayers, WinPoints);
             StartRound();
         }
-        
     }
 
     #endregion
@@ -71,7 +74,6 @@ public class GameManager : MonoBehaviour {
     }
 
     private void HandlePauseGame(bool pauseState) {
-        _isPaused = pauseState;
         Time.timeScale = pauseState ? 0 : 1;
     }
 
