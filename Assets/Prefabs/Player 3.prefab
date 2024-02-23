@@ -15094,11 +15094,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerHitSounds:
-  - {fileID: 8300000, guid: fe7639f0e8caa81429f84793528e5043, type: 3}
-  - {fileID: 8300000, guid: a0689427afc67be4aa86a5e566912251, type: 3}
-  - {fileID: 8300000, guid: 53b015e26cc6b3e418aa2ec915678daf, type: 3}
-  - {fileID: 8300000, guid: 072e614ccc33f9546a6f02713e177642, type: 3}
-  - {fileID: 8300000, guid: 80d4be9e63ee84241977d1838058f66a, type: 3}
+  - {fileID: 8300000, guid: 150e0ba04f82d1a43a3313e16bac0e63, type: 3}
+  - {fileID: 8300000, guid: f03462e58344c8c4782e5a268a0ab4d1, type: 3}
+  - {fileID: 8300000, guid: e244af489fbbe0d4e8d60cc38239eed4, type: 3}
+  - {fileID: 8300000, guid: ef234e49b2d5a374a82a699b92814677, type: 3}
+  - {fileID: 8300000, guid: f9669f4732dbf0e41907c66077bc2558, type: 3}
+  - {fileID: 8300000, guid: 03f5aad6155cb4d40baab9378d217c1c, type: 3}
   _audioSource: {fileID: 771776640}
   _playerHealth: {fileID: 836401204425825622}
 --- !u!1 &6432609861764478824
