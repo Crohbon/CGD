@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1436585644981892267}
   - component: {fileID: 2240419997225643425}
   - component: {fileID: -3533517648974234787}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: LongGun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -188,7 +188,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5472182022784841400}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: BulletSpanwPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}

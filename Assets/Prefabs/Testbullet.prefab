@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7773584844777879823}
   - component: {fileID: 3989064632694965365}
   - component: {fileID: 6974517773136423905}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Testbullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,6 +137,8 @@ MonoBehaviour:
   Damage: 10
   BulletSpeed: 20
   BulletDropRange: 0
+  WeaponName: 
+  GunnerIndex: 0
 --- !u!50 &6974517773136423905
 Rigidbody2D:
   serializedVersion: 4

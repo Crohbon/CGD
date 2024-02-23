@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2129519163603825081}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: bulletSpawnPoint
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -44,7 +44,7 @@ GameObject:
   - component: {fileID: 7926946645992374486}
   - component: {fileID: 3473822349846686004}
   - component: {fileID: 5159027681396022780}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Pistol
   m_TagString: Untagged
   m_Icon: {fileID: 0}

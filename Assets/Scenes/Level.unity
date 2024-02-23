@@ -28444,6 +28444,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _damage: 500
+  _areaName: DeathZone
 --- !u!50 &978768862
 Rigidbody2D:
   serializedVersion: 4

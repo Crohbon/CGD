@@ -14993,9 +14993,9 @@ MonoBehaviour:
   _groundLayer:
     serializedVersion: 2
     m_Bits: 64
-  _detectorCount: 5
-  _detectionRayLength: 0.5
-  _rayBuffer: 0.2
+  _detectorCount: 7
+  _detectionRayLength: 0.1
+  _rayBuffer: 0.1
   _acceleration: 90
   _moveClamp: 13
   _deAcceleration: 60
@@ -15008,7 +15008,7 @@ MonoBehaviour:
   _coyoteTimeThreshold: 0.1
   _jumpBuffer: 0.1
   _jumpEndEarlyGravityModifier: 3
-  _freeColliderIterations: 30
+  _freeColliderIterations: 50
 --- !u!61 &7949781358510413519
 BoxCollider2D:
   m_ObjectHideFlags: 0
