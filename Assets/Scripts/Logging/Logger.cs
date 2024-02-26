@@ -6,7 +6,8 @@ public static class Logger {
     private static int _gameCount = 0;
     private static string _gameStateLog = "GameStateLog_Game";
     private static string _handicapsLog = "HandicapsLog_Game";
-    private static string _weaponLog = "WeaponLog_Game";
+    private static string _weaponUsageLog = "WeaponUsageLog_Game";
+    private static string _weaponImpactLog = "WeaponImpactLog_Game";
 
     public static void LogGameState(bool isRoundEnd, bool isGameEnd, List<bool> alivePlayers, List<int> winPoints) {
         TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _gameStateLog + _gameCount + ".csv", true);
@@ -33,39 +34,39 @@ public static class Logger {
         
         switch (playerWinPoints){
             case 0:
-                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount 
+                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount + ","
                                     + false + "," + false + "," + false + "," + false + "," + false + "," + false + "," + false + "," + false);
                 break;
             case 1:
-                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount 
-                                    + (HandicapValues.ShotsWithoutDamageReduction/shotAmount >= 1) + "," 
-                                    + (HandicapValues.ShotsForMaxDamageReduction/shotAmount >= 1) + "," 
+                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount + ","
+                                    + (HandicapValues.ShotsWithoutDamageReduction/shotAmount <= 1) + "," 
+                                    + (HandicapValues.ShotsForMaxDamageReduction/shotAmount <= 1) + "," 
                                     + false + "," + false + "," + false + "," + false + "," + false + "," + false);
                 break;
             case 2:
-                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount 
-                                    + (HandicapValues.ShotsWithoutDamageReduction/shotAmount >= 1) + "," 
-                                    + (HandicapValues.ShotsForMaxDamageReduction/shotAmount >= 1) + "," 
-                                    + (HandicapValues.ShotsWithoutBulletDrop/shotAmount >= 1) + "," 
-                                    + (HandicapValues.ShotsForMinBulletDropRange/shotAmount >= 1) + "," 
+                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount + ","
+                                    + (HandicapValues.ShotsWithoutDamageReduction/shotAmount <= 1) + "," 
+                                    + (HandicapValues.ShotsForMaxDamageReduction/shotAmount <= 1) + "," 
+                                    + (HandicapValues.ShotsWithoutBulletDrop/shotAmount <= 1) + "," 
+                                    + (HandicapValues.ShotsForMinBulletDropRange/shotAmount <= 1) + "," 
                                     + false + "," + false + "," + false + "," + false);
                 break;
             case 3:
-                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount 
-                                    + (HandicapValues.ShotsWithoutDamageReduction/shotAmount >= 1) + "," 
-                                    + (HandicapValues.ShotsForMaxDamageReduction/shotAmount >= 1) + "," 
-                                    + (HandicapValues.ShotsWithoutBulletDrop/shotAmount >= 1) + "," 
-                                    + (HandicapValues.ShotsForMinBulletDropRange/shotAmount >= 1) + "," 
-                                    + (HandicapValues.JumpsWithoutHitBoxIncrease/shotAmount >= 1) + "," 
-                                    + (HandicapValues.JumpsForMaxHitBoxIncrease/shotAmount >= 1) + "," 
+                Logwriter.WriteLine(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount + ","
+                                    + (HandicapValues.ShotsWithoutDamageReduction/shotAmount <= 1) + "," 
+                                    + (HandicapValues.ShotsForMaxDamageReduction/shotAmount <= 1) + "," 
+                                    + (HandicapValues.ShotsWithoutBulletDrop/shotAmount <= 1) + "," 
+                                    + (HandicapValues.ShotsForMinBulletDropRange/shotAmount <= 1) + "," 
+                                    + (HandicapValues.JumpsWithoutHitBoxIncrease/shotAmount <= 1) + "," 
+                                    + (HandicapValues.JumpsForMaxHitBoxIncrease/shotAmount <= 1) + "," 
                                     + false + "," + false);
                 break;
             case 4:
-                Logwriter.Write(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount
+                Logwriter.Write(System.DateTime.Now + ", Player " + playerIndex + "," + shotAmount + "," + jumpAmount + ","
                                 + false + "," + false + "," + false + "," + false + "," + false + "," + false + ","
-                                + (HandicapValues.ShotsPerControlsInvert > jumpAmount) + ",");
-                if (jumpAmount > 0){
-                    Logwriter.WriteLine(HandicapValues.ShotsPerControlsInvert/jumpAmount);
+                                + (HandicapValues.ShotsPerControlsInvert < jumpAmount) + ",");
+                if (jumpAmount > HandicapValues.ShotsPerControlsInvert){
+                    Logwriter.WriteLine(jumpAmount/HandicapValues.ShotsPerControlsInvert);
                 }
                 else{
                     Logwriter.WriteLine(false);
@@ -81,7 +82,7 @@ public static class Logger {
     }
 
     public static void LogWeaponUsage(int playerIndex, string weaponName, int ammoLeft) {
-        TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _weaponLog + _gameCount + ".csv", true);
+        TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _weaponUsageLog + ".csv", true);
 
         Logwriter.WriteLine(System.DateTime.Now + "," + playerIndex + "," + weaponName + "," + ammoLeft);
         
@@ -89,9 +90,9 @@ public static class Logger {
     }
     
     public static void LogWeaponImpact(int gunnerIndex, string weaponName, float damageDealt, int hitPlayerIndex, bool killedPlayer) {
-        TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _weaponLog + _gameCount + ".csv", true);
+        TextWriter Logwriter = new StreamWriter(Application.persistentDataPath + "\\" + _weaponImpactLog + ".csv", true);
 
-        Logwriter.WriteLine(System.DateTime.Now + "," + gunnerIndex + "," + weaponName + "," + hitPlayerIndex + "," + damageDealt + "," + killedPlayer);
+        Logwriter.WriteLine(System.DateTime.Now + "," + gunnerIndex + "," + weaponName + "," + hitPlayerIndex + "," + (int)damageDealt + "," + killedPlayer);
         
         Logwriter.Close();
     }
